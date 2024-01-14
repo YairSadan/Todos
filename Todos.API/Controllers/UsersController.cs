@@ -1,4 +1,5 @@
 ﻿using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
 using Todos.API.Data;
 using Todos.API.Models.Domain;
 
@@ -17,10 +18,10 @@ public class UsersController : ControllerBase
     // GET ALL USERS
     // GET: https://localhost:portnumber/api/users
     [HttpGet]
-    public IActionResult GetAll()
+    public async Task<IActionResult> GetAll()
     {
         // Get Data From Database - Domain models
-        var users = dbContext.Users.ToList();
+        var users = await dbContext.Users.ToListAsync();
 
         // Map Domain Models to DTOs
         var usersDto = new List<UserDto>();
@@ -42,9 +43,9 @@ public class UsersController : ControllerBase
     // GET: https://localhost:portnumber/api/users/{id}
     [HttpGet]
     [Route("{id:Guid}")]
-    public IActionResult GetById([FromRoute] Guid id)
+    public async Task<IActionResult> GetById([FromRoute] Guid id)
     {
-        var user = dbContext.Users.FirstOrDefault(x => x.Id == id);
+        var user = await dbContext.Users.FirstOrDefaultAsync(x => x.Id == id);
         if (user == null)
             return NotFound();
         var userDto = new UserDto
@@ -59,15 +60,15 @@ public class UsersController : ControllerBase
     // Post To Create New User 
     // POST: https://localhost:portnumber/api/users
     [HttpPost]
-    public IActionResult Create([FromBody] AddUserRequestDto addUserRequestDto)
+    public async Task<IActionResult> Create([FromBody] AddUserRequestDto addUserRequestDto)
     {
         var userModel = new User
         {
             Name = addUserRequestDto.Name,
             ImageUrl = addUserRequestDto.ImageUrl
         };
-        dbContext.Users.Add(userModel);
-        dbContext.SaveChanges();
+        await dbContext.Users.AddAsync(userModel);
+        await dbContext.SaveChangesAsync();
         var userDto = new UserDto
         {
             Id = userModel.Id,
@@ -80,14 +81,14 @@ public class UsersController : ControllerBase
     // PUT: https://localhost:portnumber/api/users/{id}
     [HttpPut]
     [Route("{id:Guid}")]
-    public IActionResult Update([FromRoute] Guid id, [FromBody] UpdateUserRequestDto updateUserRequestDto)
+    public async Task<IActionResult> Update([FromRoute] Guid id, [FromBody] UpdateUserRequestDto updateUserRequestDto)
     {
-        var userModel = dbContext.Users.FirstOrDefault(x => x.Id == id);
+        var userModel = await dbContext.Users.FirstOrDefaultAsync(x => x.Id == id);
         if (userModel == null)
             return NotFound();
         userModel.Name = updateUserRequestDto.Name;
         userModel.ImageUrl = updateUserRequestDto.ImageUrl;
-        dbContext.SaveChanges();
+        await dbContext.SaveChangesAsync();
         var userDto = new UserDto
         {
             Id = userModel.Id,
@@ -101,13 +102,13 @@ public class UsersController : ControllerBase
     // DELETE: https://localhost:portnumber/api/users/{id}
     [HttpDelete]
     [Route("{id:Guid}")]
-    public IActionResult Delete([FromRoute] Guid id)
+    public async Task<IActionResult> Delete([FromRoute] Guid id)
     {
-        var userModel = dbContext.Users.FirstOrDefault(x => x.Id == id);
+        var userModel = await dbContext.Users.FirstOrDefaultAsync(x => x.Id == id);
         if (userModel == null)
             return NotFound();
         dbContext.Users.Remove(userModel);
-        dbContext.SaveChanges();
+        await dbContext.SaveChangesAsync();
         var userDto = new UserDto
         {
             Id = userModel.Id,
