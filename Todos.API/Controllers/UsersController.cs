@@ -5,16 +5,19 @@ namespace Todos.API.Controllers;
 // https://localhost:portnumber/api/users
 [Route("api/[controller]")]
 [ApiController]
-public class UsersController : ControllerBase {
+public class UsersController : ControllerBase
+{
     private readonly TodosDbContext dbContext;
-    public UsersController(TodosDbContext dbContext) {
+    public UsersController(TodosDbContext dbContext)
+    {
         this.dbContext = dbContext;
     }
 
     // GET ALL USERS
     // GET: https://localhost:portnumber/api/users
     [HttpGet]
-    public IActionResult GetAll() {
+    public IActionResult GetAll()
+    {
         var users = dbContext.Users.ToList();
         return Ok(users);
     }
@@ -23,7 +26,8 @@ public class UsersController : ControllerBase {
     // GET: https://localhost:portnumber/api/users/{id}
     [HttpGet]
     [Route("{id:Guid}")]
-    public IActionResult GetById([FromRoute] Guid id) {
+    public IActionResult GetById([FromRoute] Guid id)
+    {
         var user = dbContext.Users.FirstOrDefault(x => x.Id == id);
         if (user == null)
             return NotFound();

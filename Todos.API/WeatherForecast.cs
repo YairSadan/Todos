@@ -1,5 +1,7 @@
-namespace Todos.API {
-    public class WeatherForecast {
+namespace Todos.API
+{
+    public class WeatherForecast
+    {
         public DateOnly Date { get; set; }
 
         public int TemperatureC { get; set; }

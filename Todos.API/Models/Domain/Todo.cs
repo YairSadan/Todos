@@ -1,5 +1,6 @@
 ﻿namespace Todos.API.Models.Domain;
-public class Todo {
+public class Todo
+{
     public Guid Id { get; set; }
     public string Title { get; set; }
     public string? Description { get; set; }
@@ -12,12 +13,14 @@ public class Todo {
     public User User { get; set; }
 
 }
-public enum PriorityLevel {
+public enum PriorityLevel
+{
     Low,
     Medium,
     High
 }
-public enum StatusLevel {
+public enum StatusLevel
+{
     NotStarted,
     InProgress,
     Completed
