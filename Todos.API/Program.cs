@@ -11,7 +11,7 @@ builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 
 builder.Services.AddDbContext<TodosDbContext>(options =>
-options.UseSqlServer(builder.Configuration.GetConnectionString("TodosConnectionString")));
+options.UseNpgsql(builder.Configuration.GetConnectionString("TodosConnectionString")));
 
 var app = builder.Build();
 
