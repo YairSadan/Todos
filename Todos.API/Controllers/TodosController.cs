@@ -19,11 +19,11 @@ namespace Todos.API.Controllers
         }
         // POST: api/todos
         [HttpPost]
+        [ValidateModel]
         public async Task<IActionResult> Create([FromBody] AddTodoRequestDto addTodoRequestDto)
         {
             var todoModel = mapper.Map<Todo>(addTodoRequestDto);
             await todoRepository.CreateAsync(todoModel);
-
             return Ok(mapper.Map<TodoDto>(todoModel));
         }
 
@@ -49,6 +49,7 @@ namespace Todos.API.Controllers
         // PUT: api/todos/{id}
         [HttpPut]
         [Route("{id:Guid}")]
+        [ValidateModel]
         public async Task<IActionResult> Update([FromRoute] Guid id, [FromBody] UpdateTodoRequestDto updateTodoRequestDto)
         {
             var todoModel = mapper.Map<Todo>(updateTodoRequestDto);

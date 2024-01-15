@@ -41,6 +41,7 @@ public class UsersController : ControllerBase
 
     // POST: https://localhost:portnumber/api/users
     [HttpPost]
+    [ValidateModel]
     public async Task<IActionResult> Create([FromBody] AddUserRequestDto addUserRequestDto)
     {
         var userModel = mapper.Map<User>(addUserRequestDto);
@@ -51,6 +52,7 @@ public class UsersController : ControllerBase
     // PUT: https://localhost:portnumber/api/users/{id}
     [HttpPut]
     [Route("{id:Guid}")]
+    [ValidateModel]
     public async Task<IActionResult> Update([FromRoute] Guid id, [FromBody] UpdateUserRequestDto updateUserRequestDto)
     {
         var userModel = mapper.Map<User>(updateUserRequestDto);
