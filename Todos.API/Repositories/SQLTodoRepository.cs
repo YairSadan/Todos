@@ -29,7 +29,7 @@ public class SQLTodoRepository : ITodoRepository
         return existingTodo;
     }
 
-    public async Task<List<Todo>> GetAllAsync(string? filterOn = null, string? filterQuery = null, string? sortBy = null, bool isAscending = true)
+    public async Task<List<Todo>> GetAllAsync(string? filterOn = null, string? filterQuery = null, string? sortBy = null, bool isAscending = true, int pageNumber = 1, int pageSize = 1000)
     {
         var todos = dbContext.Todos.Include("User").Include("Priority").Include("Status").AsQueryable();
         // Filtering 
@@ -57,7 +57,10 @@ public class SQLTodoRepository : ITodoRepository
         }
         else
             todos = todos.OrderByDescending(todo => todo.CreatedOn);
-        return await todos.ToListAsync();
+
+        // Pagination
+        var skipResults = (pageNumber - 1) * pageSize;
+        return await todos.Skip(skipResults).Take(pageSize).ToListAsync();
     }
 
     public async Task<Todo?> GetByIdAsync(Guid id)
