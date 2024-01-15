@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using AutoMapper;
+using Microsoft.AspNetCore.Mvc;
 using Todos.API.Data;
 using Todos.API.Models.Domain;
 
@@ -10,37 +11,23 @@ public class UsersController : ControllerBase
 {
     private readonly TodosDbContext dbContext;
     private readonly IUserRepository userRepository;
-    public UsersController(TodosDbContext dbContext, IUserRepository userRepository)
+    private readonly IMapper mapper;
+
+    public UsersController(TodosDbContext dbContext, IUserRepository userRepository, IMapper mapper)
     {
         this.dbContext = dbContext;
         this.userRepository = userRepository;
+        this.mapper = mapper;
     }
 
-    // GET ALL USERS
     // GET: https://localhost:portnumber/api/users
     [HttpGet]
     public async Task<IActionResult> GetAll()
     {
-        // Get Data From Database - Domain models
         var users = await userRepository.GetAllAsync();
-
-        // Map Domain Models to DTOs
-        var usersDto = new List<UserDto>();
-        foreach (var user in users)
-        {
-            usersDto.Add(new UserDto
-            {
-                Id = user.Id,
-                Name = user.Name,
-                ImageUrl = user.ImageUrl
-            });
-        }
-
-        // Return DTOs
-        return Ok(usersDto);
+        return Ok(mapper.Map<List<UserDto>>(users));
     }
 
-    // GET USER BY ID
     // GET: https://localhost:portnumber/api/users/{id}
     [HttpGet]
     [Route("{id:Guid}")]
@@ -49,58 +36,30 @@ public class UsersController : ControllerBase
         var user = await userRepository.GetByIdAsync(id);
         if (user == null)
             return NotFound();
-        var userDto = new UserDto
-        {
-            Id = user.Id,
-            Name = user.Name,
-            ImageUrl = user.ImageUrl
-        };
-        return Ok(userDto);
+        return Ok(mapper.Map<UserDto>(user));
     }
 
-    // Post To Create New User 
     // POST: https://localhost:portnumber/api/users
     [HttpPost]
     public async Task<IActionResult> Create([FromBody] AddUserRequestDto addUserRequestDto)
     {
-        var userModel = new User
-        {
-            Name = addUserRequestDto.Name,
-            ImageUrl = addUserRequestDto.ImageUrl
-        };
+        var userModel = mapper.Map<User>(addUserRequestDto);
         userModel = await userRepository.CreateAsync(userModel);
-        var userDto = new UserDto
-        {
-            Id = userModel.Id,
-            Name = userModel.Name,
-            ImageUrl = userModel.ImageUrl
-        };
+        var userDto = mapper.Map<UserDto>(userModel);
         return CreatedAtAction(nameof(GetById), new { id = userModel.Id }, userDto);
     }
-    // Update user
     // PUT: https://localhost:portnumber/api/users/{id}
     [HttpPut]
     [Route("{id:Guid}")]
     public async Task<IActionResult> Update([FromRoute] Guid id, [FromBody] UpdateUserRequestDto updateUserRequestDto)
     {
-        var userModel = new User
-        {
-            Name = updateUserRequestDto.Name,
-            ImageUrl = updateUserRequestDto.ImageUrl
-        };
+        var userModel = mapper.Map<User>(updateUserRequestDto);
         userModel = await userRepository.UpdateAsync(id, userModel);
         if (userModel == null)
             return NotFound();
-        var userDto = new UserDto
-        {
-            Id = userModel.Id,
-            Name = userModel.Name,
-            ImageUrl = userModel.ImageUrl
-        };
-        return Ok(userDto);
+        return Ok(mapper.Map<UserDto>(userModel));
     }
 
-    // Delete user
     // DELETE: https://localhost:portnumber/api/users/{id}
     [HttpDelete]
     [Route("{id:Guid}")]
@@ -109,12 +68,6 @@ public class UsersController : ControllerBase
         var userModel = await userRepository.DeleteAsync(id);
         if (userModel == null)
             return NotFound();
-        var userDto = new UserDto
-        {
-            Id = userModel.Id,
-            Name = userModel.Name,
-            ImageUrl = userModel.ImageUrl
-        };
-        return Ok(userDto);
+        return Ok(mapper.Map<UserDto>(userModel));
     }
 }

@@ -15,6 +15,8 @@ builder.Services.AddDbContext<TodosDbContext>(options =>
 options.UseNpgsql(builder.Configuration.GetConnectionString("TodosConnectionString")));
 builder.Services.AddScoped<IUserRepository, SQLUserRepository>();
 
+builder.Services.AddAutoMapper(typeof(AutoMapperProfiles));
+
 var app = builder.Build();
 
 // Configure the HTTP request pipeline.
