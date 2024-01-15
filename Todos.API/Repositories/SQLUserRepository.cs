@@ -29,9 +29,15 @@ public class SQLUserRepository : IUserRepository
         return existingUser;
     }
 
-    public async Task<List<User>> GetAllAsync()
+    public async Task<List<User>> GetAllAsync(string? filterOn = null, string? filterQuery = null)
     {
-        return await dbContext.Users.ToListAsync();
+        var users = dbContext.Users.AsQueryable();
+        if (string.IsNullOrWhiteSpace(filterOn) == false && string.IsNullOrWhiteSpace(filterQuery) == false)
+        {
+            if (filterOn.Equals("Name", StringComparison.OrdinalIgnoreCase))
+                users = users.Where(user => EF.Functions.ILike(user.Name, $"%{filterQuery}%"));
+        }
+        return await users.ToListAsync();
     }
 
     public async Task<User?> GetByIdAsync(Guid id)

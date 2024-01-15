@@ -22,9 +22,9 @@ public class UsersController : ControllerBase
 
     // GET: https://localhost:portnumber/api/users
     [HttpGet]
-    public async Task<IActionResult> GetAll()
+    public async Task<IActionResult> GetAll([FromQuery] string? filterOn, [FromQuery] string? filterQuery)
     {
-        var users = await userRepository.GetAllAsync();
+        var users = await userRepository.GetAllAsync(filterOn, filterQuery);
         return Ok(mapper.Map<List<UserDto>>(users));
     }
 

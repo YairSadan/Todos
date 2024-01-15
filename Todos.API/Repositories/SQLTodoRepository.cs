@@ -29,9 +29,20 @@ public class SQLTodoRepository : ITodoRepository
         return existingTodo;
     }
 
-    public async Task<List<Todo>> GetAllAsync()
+    public async Task<List<Todo>> GetAllAsync(string? filterOn = null, string? filterQuery = null)
     {
-        return await dbContext.Todos.Include("User").Include("Priority").Include("Status").ToListAsync();
+        var todos = dbContext.Todos.Include("User").Include("Priority").Include("Status").AsQueryable();
+        // Filtering 
+        if (string.IsNullOrWhiteSpace(filterOn) == false && string.IsNullOrWhiteSpace(filterQuery) == false)
+        {
+            if (filterOn.Equals("Status", StringComparison.OrdinalIgnoreCase))
+                todos = todos.Where(todo => EF.Functions.ILike(todo.Status.Name, filterQuery));
+            else if (filterOn.Equals("Priority", StringComparison.OrdinalIgnoreCase))
+                todos = todos.Where(todo => EF.Functions.ILike(todo.Priority.Name, filterQuery));
+            else if (filterOn.Equals("User", StringComparison.OrdinalIgnoreCase))
+                todos = todos.Where(todo => EF.Functions.ILike(todo.User.Name, filterQuery));
+        }
+        return await todos.ToListAsync();
     }
 
     public async Task<Todo?> GetByIdAsync(Guid id)

@@ -28,10 +28,11 @@ namespace Todos.API.Controllers
         }
 
         // GET: api/todos
+        // GET: api/todos?Status=InProgress
         [HttpGet]
-        public async Task<IActionResult> GetAll()
+        public async Task<IActionResult> GetAll([FromQuery] string? filterOn, [FromQuery] string? filterQuery)
         {
-            var todosModel = await todoRepository.GetAllAsync();
+            var todosModel = await todoRepository.GetAllAsync(filterOn, filterQuery);
             return Ok(mapper.Map<List<TodoDto>>(todosModel));
         }
 
