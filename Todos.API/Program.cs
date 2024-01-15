@@ -14,6 +14,7 @@ builder.Services.AddSwaggerGen();
 builder.Services.AddDbContext<TodosDbContext>(options =>
 options.UseNpgsql(builder.Configuration.GetConnectionString("TodosConnectionString")));
 builder.Services.AddScoped<IUserRepository, SQLUserRepository>();
+builder.Services.AddScoped<ITodoRepository, SQLTodoRepository>();
 
 builder.Services.AddAutoMapper(typeof(AutoMapperProfiles));
 

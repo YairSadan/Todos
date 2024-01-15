@@ -10,6 +10,9 @@ public class AutoMapperProfiles: Profile
         CreateMap<User, UserDto>().ReverseMap();
         CreateMap<AddUserRequestDto, User>().ReverseMap();
         CreateMap<UpdateUserRequestDto, User>().ReverseMap();
+        CreateMap<AddTodoRequestDto, Todo>().ReverseMap();
+        CreateMap<Todo, TodoDto>().ReverseMap();
+        CreateMap<UpdateTodoRequestDto, Todo>().ReverseMap();
     }
 
 }
