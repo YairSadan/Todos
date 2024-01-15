@@ -29,7 +29,7 @@ public class SQLTodoRepository : ITodoRepository
         return existingTodo;
     }
 
-    public async Task<List<Todo>> GetAllAsync(string? filterOn = null, string? filterQuery = null)
+    public async Task<List<Todo>> GetAllAsync(string? filterOn = null, string? filterQuery = null, string? sortBy = null, bool isAscending = true)
     {
         var todos = dbContext.Todos.Include("User").Include("Priority").Include("Status").AsQueryable();
         // Filtering 
@@ -42,6 +42,21 @@ public class SQLTodoRepository : ITodoRepository
             else if (filterOn.Equals("User", StringComparison.OrdinalIgnoreCase))
                 todos = todos.Where(todo => EF.Functions.ILike(todo.User.Name, filterQuery));
         }
+
+        // Sorting
+        if (string.IsNullOrWhiteSpace(sortBy) == false)
+        {
+            if (sortBy.Equals("Status", StringComparison.OrdinalIgnoreCase))
+                todos = isAscending ? todos.OrderBy(todo => todo.Status.Name) : todos.OrderByDescending(todo => todo.Status.Name);
+            else if (sortBy.Equals("Priority", StringComparison.OrdinalIgnoreCase))
+                todos = isAscending ? todos.OrderBy(todo => todo.Priority.Name) : todos.OrderByDescending(todo => todo.Priority.Name);
+            else if (sortBy.Equals("User", StringComparison.OrdinalIgnoreCase))
+                todos = isAscending ? todos.OrderBy(todo => todo.User.Name) : todos.OrderByDescending(todo => todo.User.Name);
+            else if (sortBy.Equals("Due", StringComparison.OrdinalIgnoreCase))
+                todos = isAscending ? todos.OrderBy(todo => todo.Due) : todos.OrderByDescending(todo => todo.Due);
+        }
+        else
+            todos = todos.OrderByDescending(todo => todo.CreatedOn);
         return await todos.ToListAsync();
     }
 
