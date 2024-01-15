@@ -31,12 +31,12 @@ public class SQLTodoRepository : ITodoRepository
 
     public async Task<List<Todo>> GetAllAsync()
     {
-        return await dbContext.Todos.Include("User").ToListAsync();
+        return await dbContext.Todos.Include("User").Include("Priority").Include("Status").ToListAsync();
     }
 
     public async Task<Todo?> GetByIdAsync(Guid id)
     {
-        return await dbContext.Todos.Include("User").FirstOrDefaultAsync(todo => todo.Id == id);
+        return await dbContext.Todos.Include("User").Include("Priority").Include("Status").FirstOrDefaultAsync(todo => todo.Id == id);
     }
 
     public async Task<Todo?> UpdateAsync(Guid id, Todo todo)

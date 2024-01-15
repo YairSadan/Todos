@@ -12,11 +12,11 @@ public class UpdateTodoRequestDto
     [MaxLength(1000, ErrorMessage = "Description cannot be more than 1000 characters long")]
     public string? Description { get; set; }
     [Required]
-    public PriorityLevel Priority { get; set; }
-    [Required]
-    public StatusLevel Status { get; set; }
-    [Required]
     public DateTime Due { get; set; }
     [Required]
     public Guid UserId { get; set; }
+    [Required]
+    public Guid PriorityId { get; set; }
+    [Required]
+    public Guid StatusId { get; set; }
 }

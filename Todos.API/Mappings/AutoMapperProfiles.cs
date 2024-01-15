@@ -13,6 +13,8 @@ public class AutoMapperProfiles: Profile
         CreateMap<AddTodoRequestDto, Todo>().ReverseMap();
         CreateMap<Todo, TodoDto>().ReverseMap();
         CreateMap<UpdateTodoRequestDto, Todo>().ReverseMap();
+        CreateMap<Priority, PriorityDto>().ReverseMap();
+        CreateMap<Status, StatusDto>().ReverseMap();
     }
 
 }
