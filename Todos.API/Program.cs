@@ -1,4 +1,5 @@
 using Microsoft.EntityFrameworkCore;
+using Todos.API;
 using Todos.API.Data;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -12,6 +13,7 @@ builder.Services.AddSwaggerGen();
 
 builder.Services.AddDbContext<TodosDbContext>(options =>
 options.UseNpgsql(builder.Configuration.GetConnectionString("TodosConnectionString")));
+builder.Services.AddScoped<IUserRepository, SQLUserRepository>();
 
 var app = builder.Build();
 

@@ -1,5 +1,4 @@
 ﻿using Microsoft.AspNetCore.Mvc;
-using Microsoft.EntityFrameworkCore;
 using Todos.API.Data;
 using Todos.API.Models.Domain;
 
@@ -10,9 +9,11 @@ namespace Todos.API.Controllers;
 public class UsersController : ControllerBase
 {
     private readonly TodosDbContext dbContext;
-    public UsersController(TodosDbContext dbContext)
+    private readonly IUserRepository userRepository;
+    public UsersController(TodosDbContext dbContext, IUserRepository userRepository)
     {
         this.dbContext = dbContext;
+        this.userRepository = userRepository;
     }
 
     // GET ALL USERS
@@ -21,7 +22,7 @@ public class UsersController : ControllerBase
     public async Task<IActionResult> GetAll()
     {
         // Get Data From Database - Domain models
-        var users = await dbContext.Users.ToListAsync();
+        var users = await userRepository.GetAllAsync();
 
         // Map Domain Models to DTOs
         var usersDto = new List<UserDto>();
@@ -45,7 +46,7 @@ public class UsersController : ControllerBase
     [Route("{id:Guid}")]
     public async Task<IActionResult> GetById([FromRoute] Guid id)
     {
-        var user = await dbContext.Users.FirstOrDefaultAsync(x => x.Id == id);
+        var user = await userRepository.GetByIdAsync(id);
         if (user == null)
             return NotFound();
         var userDto = new UserDto
@@ -67,8 +68,7 @@ public class UsersController : ControllerBase
             Name = addUserRequestDto.Name,
             ImageUrl = addUserRequestDto.ImageUrl
         };
-        await dbContext.Users.AddAsync(userModel);
-        await dbContext.SaveChangesAsync();
+        userModel = await userRepository.CreateAsync(userModel);
         var userDto = new UserDto
         {
             Id = userModel.Id,
@@ -83,12 +83,14 @@ public class UsersController : ControllerBase
     [Route("{id:Guid}")]
     public async Task<IActionResult> Update([FromRoute] Guid id, [FromBody] UpdateUserRequestDto updateUserRequestDto)
     {
-        var userModel = await dbContext.Users.FirstOrDefaultAsync(x => x.Id == id);
+        var userModel = new User
+        {
+            Name = updateUserRequestDto.Name,
+            ImageUrl = updateUserRequestDto.ImageUrl
+        };
+        userModel = await userRepository.UpdateAsync(id, userModel);
         if (userModel == null)
             return NotFound();
-        userModel.Name = updateUserRequestDto.Name;
-        userModel.ImageUrl = updateUserRequestDto.ImageUrl;
-        await dbContext.SaveChangesAsync();
         var userDto = new UserDto
         {
             Id = userModel.Id,
@@ -104,11 +106,9 @@ public class UsersController : ControllerBase
     [Route("{id:Guid}")]
     public async Task<IActionResult> Delete([FromRoute] Guid id)
     {
-        var userModel = await dbContext.Users.FirstOrDefaultAsync(x => x.Id == id);
+        var userModel = await userRepository.DeleteAsync(id);
         if (userModel == null)
             return NotFound();
-        dbContext.Users.Remove(userModel);
-        await dbContext.SaveChangesAsync();
         var userDto = new UserDto
         {
             Id = userModel.Id,
