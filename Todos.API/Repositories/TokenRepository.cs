@@ -6,19 +6,18 @@ using Microsoft.IdentityModel.Tokens;
 
 namespace Todos.API;
 
-public class TokenRepository : ITokenRepository
+public class TokenRepository(IConfiguration configuration) : ITokenRepository
 {
-    private readonly IConfiguration configuration;
-    public TokenRepository(IConfiguration configuration)
-    {
-        this.configuration = configuration;
-    }
+    private readonly IConfiguration configuration = configuration;
+
     public string CreateJWTToken(IdentityUser user, List<string> roles)
     {
 
         // Create claims
-        var claims = new List<Claim>();
-        claims.Add(new Claim(ClaimTypes.Email, user.Email));
+        var claims = new List<Claim>
+        {
+            new(ClaimTypes.Email, user.Email)
+        };
         foreach (var role in roles)
         {
             claims.Add(new Claim(ClaimTypes.Role, role));

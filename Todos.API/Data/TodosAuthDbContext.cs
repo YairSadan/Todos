@@ -4,12 +4,8 @@ using Microsoft.EntityFrameworkCore;
 
 namespace Todos.API;
 
-public class TodosAuthDbContext : IdentityDbContext
+public class TodosAuthDbContext(DbContextOptions<TodosAuthDbContext> options) : IdentityDbContext(options)
 {
-    public TodosAuthDbContext(DbContextOptions<TodosAuthDbContext> options) : base(options)
-    {
-    }
-
     protected override void OnModelCreating(ModelBuilder builder)
     {
         base.OnModelCreating(builder);

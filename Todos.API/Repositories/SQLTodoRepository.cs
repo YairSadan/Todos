@@ -4,14 +4,10 @@ using Todos.API.Models.Domain;
 
 namespace Todos.API;
 
-public class SQLTodoRepository : ITodoRepository
+public class SQLTodoRepository(TodosDbContext dbContext) : ITodoRepository
 {
-    private readonly TodosDbContext dbContext;
+    private readonly TodosDbContext dbContext = dbContext;
 
-    public SQLTodoRepository(TodosDbContext dbContext)
-    {
-        this.dbContext = dbContext;
-    }
     public async Task<Todo> CreateAsync(Todo todo)
     {
         await dbContext.Todos.AddAsync(todo);

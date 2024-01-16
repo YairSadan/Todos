@@ -9,18 +9,11 @@ namespace Todos.API.Controllers;
 [Route("api/[controller]")]
 [ApiController]
 [Authorize]
-public class UsersController : ControllerBase
+public class UsersController(TodosDbContext dbContext, IUserRepository userRepository, IMapper mapper) : ControllerBase
 {
-    private readonly TodosDbContext dbContext;
-    private readonly IUserRepository userRepository;
-    private readonly IMapper mapper;
-
-    public UsersController(TodosDbContext dbContext, IUserRepository userRepository, IMapper mapper)
-    {
-        this.dbContext = dbContext;
-        this.userRepository = userRepository;
-        this.mapper = mapper;
-    }
+    private readonly TodosDbContext dbContext = dbContext;
+    private readonly IUserRepository userRepository = userRepository;
+    private readonly IMapper mapper = mapper;
 
     // GET: https://localhost:portnumber/api/users
     [HttpGet]

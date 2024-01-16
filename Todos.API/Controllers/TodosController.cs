@@ -7,16 +7,11 @@ namespace Todos.API.Controllers
     // https://localhost:portnumber/api/todos
     [Route("api/[controller]")]
     [ApiController]
-    public class TodosController : ControllerBase
+    public class TodosController(IMapper mapper, ITodoRepository todoRepository) : ControllerBase
     {
-        private readonly IMapper mapper;
-        private readonly ITodoRepository todoRepository;
+        private readonly IMapper mapper = mapper;
+        private readonly ITodoRepository todoRepository = todoRepository;
 
-        public TodosController(IMapper mapper, ITodoRepository todoRepository)
-        {
-            this.mapper = mapper;
-            this.todoRepository = todoRepository;
-        }
         // POST: api/todos
         [HttpPost]
         [ValidateModel]

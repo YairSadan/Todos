@@ -5,16 +5,11 @@ namespace Todos.API.Controllers;
 
 [Route("api/[controller]")]
 [ApiController]
-public class AuthController : ControllerBase
+public class AuthController(UserManager<IdentityUser> userManager, ITokenRepository tokenRepository) : ControllerBase
 {
-    private readonly UserManager<IdentityUser> userManager;
-    private readonly ITokenRepository tokenRepository;
+    private readonly UserManager<IdentityUser> userManager = userManager;
+    private readonly ITokenRepository tokenRepository = tokenRepository;
 
-    public AuthController(UserManager<IdentityUser> userManager, ITokenRepository tokenRepository)
-    {
-        this.userManager = userManager;
-        this.tokenRepository = tokenRepository;
-    }
     // Post: /api/auth/register
     [HttpPost]
     [Route("register")]

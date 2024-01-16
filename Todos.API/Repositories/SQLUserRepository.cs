@@ -4,13 +4,9 @@ using Todos.API.Models.Domain;
 
 namespace Todos.API;
 
-public class SQLUserRepository : IUserRepository
+public class SQLUserRepository(TodosDbContext dbContext) : IUserRepository
 {
-    private readonly TodosDbContext dbContext;
-    public SQLUserRepository(TodosDbContext dbContext)
-    {
-        this.dbContext = dbContext;
-    }
+    private readonly TodosDbContext dbContext = dbContext;
 
     public async Task<User> CreateAsync(User user)
     {

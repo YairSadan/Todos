@@ -2,13 +2,8 @@
 using Todos.API.Models.Domain;
 
 namespace Todos.API.Data;
-public class TodosDbContext : DbContext
+public class TodosDbContext(DbContextOptions<TodosDbContext> dbContextOptions) : DbContext(dbContextOptions)
 {
-    public TodosDbContext(DbContextOptions<TodosDbContext> dbContextOptions) : base(dbContextOptions)
-    {
-
-    }
-
     public DbSet<Todo> Todos { get; set; }
     public DbSet<User> Users { get; set; }
     public DbSet<Priority> Priorities { get; set; }
