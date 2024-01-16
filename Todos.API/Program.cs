@@ -14,8 +14,10 @@ builder.Services.AddControllers();
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 
-builder.Services.AddDbContext<TodosDbContext>(options =>
-options.UseNpgsql(builder.Configuration.GetConnectionString("TodosConnectionString")));
+builder.Services.AddDbContext<TodosDbContext>(options => options.UseNpgsql(builder.Configuration.GetConnectionString("TodosConnectionString")));
+
+builder.Services.AddDbContext<TodosAuthDbContext>(options => options.UseNpgsql(builder.Configuration.GetConnectionString("TodosAuthConnectionString")));
+
 builder.Services.AddScoped<IUserRepository, SQLUserRepository>();
 builder.Services.AddScoped<ITodoRepository, SQLTodoRepository>();
 

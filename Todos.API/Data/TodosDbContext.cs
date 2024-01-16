@@ -4,7 +4,7 @@ using Todos.API.Models.Domain;
 namespace Todos.API.Data;
 public class TodosDbContext : DbContext
 {
-    public TodosDbContext(DbContextOptions dbContextOptions) : base(dbContextOptions)
+    public TodosDbContext(DbContextOptions<TodosDbContext> dbContextOptions) : base(dbContextOptions)
     {
 
     }
