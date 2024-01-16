@@ -1,4 +1,5 @@
 ﻿using AutoMapper;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Todos.API.Data;
 using Todos.API.Models.Domain;
@@ -7,6 +8,7 @@ namespace Todos.API.Controllers;
 // https://localhost:portnumber/api/users
 [Route("api/[controller]")]
 [ApiController]
+[Authorize]
 public class UsersController : ControllerBase
 {
     private readonly TodosDbContext dbContext;
