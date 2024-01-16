@@ -1,5 +1,6 @@
 using System.Text;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.Tokens;
 using Todos.API;
@@ -22,6 +23,20 @@ builder.Services.AddScoped<IUserRepository, SQLUserRepository>();
 builder.Services.AddScoped<ITodoRepository, SQLTodoRepository>();
 
 builder.Services.AddAutoMapper(typeof(AutoMapperProfiles));
+
+builder.Services.AddIdentityCore<IdentityUser>()
+.AddRoles<IdentityRole>()
+.AddTokenProvider<DataProtectorTokenProvider<IdentityUser>>("Todos")
+.AddEntityFrameworkStores<TodosAuthDbContext>()
+.AddDefaultTokenProviders();
+
+builder.Services.Configure<IdentityOptions>(options => {
+    options.Password.RequireDigit = false;
+    options.Password.RequireLowercase = false;
+    options.Password.RequireNonAlphanumeric = false;
+    options.Password.RequireUppercase = false;
+    options.Password.RequiredLength = 6;
+});
 
 builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
 .AddJwtBearer(options => options.TokenValidationParameters = new TokenValidationParameters
