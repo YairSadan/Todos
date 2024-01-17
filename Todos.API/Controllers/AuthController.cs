@@ -15,16 +15,15 @@ public class AuthController(UserManager<IdentityUser> userManager, ITokenReposit
     [Route("register")]
     public async Task<IActionResult> Register([FromBody] RegisterRequestDto registerRequestDto)
     {
+
         var identityUser = new IdentityUser
         {
-            UserName = registerRequestDto.Username,
-            Email = registerRequestDto.Username
+            Email = registerRequestDto.Email,
         };
         var identityResult = await userManager.CreateAsync(identityUser, registerRequestDto.Password);
-
         if (identityResult.Succeeded)
         {
-            if (registerRequestDto.Roles != null && registerRequestDto.Roles.Any())
+            if (registerRequestDto.Roles != null && registerRequestDto.Roles.Length != 0)
             {
                 identityResult = await userManager.AddToRolesAsync(identityUser, registerRequestDto.Roles);
                 if (identityResult.Succeeded)
@@ -42,7 +41,7 @@ public class AuthController(UserManager<IdentityUser> userManager, ITokenReposit
     [Route("login")]
     public async Task<IActionResult> Login([FromBody] LoginRequestDto loginRequestDto)
     {
-        var user = await userManager.FindByEmailAsync(loginRequestDto.Username);
+        var user = await userManager.FindByEmailAsync(loginRequestDto.Email);
         if (user != null)
         {
             var checkPasswordResult = await userManager.CheckPasswordAsync(user, loginRequestDto.Password);
@@ -55,7 +54,8 @@ public class AuthController(UserManager<IdentityUser> userManager, ITokenReposit
                     var response = new LoginResponseDto
                     {
                         JwtToken = jwtToken,
-                        UserId = user.Id
+                        UserId = user.Id,
+                        Email = user.Email,
                     };
                     return Ok(response);
                 }

@@ -2,6 +2,7 @@
 using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 using Todos.API.Data;
@@ -11,9 +12,11 @@ using Todos.API.Data;
 namespace Todos.API.Migrations
 {
     [DbContext(typeof(TodosDbContext))]
-    partial class TodosDbContextModelSnapshot : ModelSnapshot
+    [Migration("20240117175040_Drop User Table")]
+    partial class DropUserTable
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -89,10 +92,6 @@ namespace Todos.API.Migrations
                     b.Property<DateTime>("Due")
                         .HasColumnType("timestamp with time zone");
 
-                    b.Property<string>("IdentityUserId")
-                        .IsRequired()
-                        .HasColumnType("text");
-
                     b.Property<Guid>("PriorityId")
                         .HasColumnType("uuid");
 
@@ -103,13 +102,19 @@ namespace Todos.API.Migrations
                         .IsRequired()
                         .HasColumnType("text");
 
-                    b.HasKey("Id");
+                    b.Property<Guid>("UserId")
+                        .HasColumnType("uuid");
 
-                    b.HasIndex("IdentityUserId");
+                    b.Property<string>("UserId1")
+                        .HasColumnType("text");
+
+                    b.HasKey("Id");
 
                     b.HasIndex("PriorityId");
 
                     b.HasIndex("StatusId");
+
+                    b.HasIndex("UserId1");
 
                     b.ToTable("Todos");
                 });
@@ -190,12 +195,6 @@ namespace Todos.API.Migrations
 
             modelBuilder.Entity("Todos.API.Models.Domain.Todo", b =>
                 {
-                    b.HasOne("Microsoft.AspNetCore.Identity.IdentityUser", "IdentityUser")
-                        .WithMany()
-                        .HasForeignKey("IdentityUserId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
                     b.HasOne("Todos.API.Priority", "Priority")
                         .WithMany()
                         .HasForeignKey("PriorityId")
@@ -208,11 +207,15 @@ namespace Todos.API.Migrations
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.Navigation("IdentityUser");
+                    b.HasOne("Microsoft.AspNetCore.Identity.IdentityUser", "User")
+                        .WithMany()
+                        .HasForeignKey("UserId1");
 
                     b.Navigation("Priority");
 
                     b.Navigation("Status");
+
+                    b.Navigation("User");
                 });
 #pragma warning restore 612, 618
         }

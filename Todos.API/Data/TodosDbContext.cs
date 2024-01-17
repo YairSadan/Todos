@@ -5,7 +5,6 @@ namespace Todos.API.Data;
 public class TodosDbContext(DbContextOptions<TodosDbContext> dbContextOptions) : DbContext(dbContextOptions)
 {
     public DbSet<Todo> Todos { get; set; }
-    public DbSet<User> Users { get; set; }
     public DbSet<Priority> Priorities { get; set; }
     public DbSet<Status> Statuses { get; set; }
 

@@ -2,6 +2,7 @@
 using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 using Todos.API;
@@ -11,9 +12,11 @@ using Todos.API;
 namespace Todos.API.Migrations.TodosAuthDb
 {
     [DbContext(typeof(TodosAuthDbContext))]
-    partial class TodosAuthDbContextModelSnapshot : ModelSnapshot
+    [Migration("20240117175020_Drop User Table")]
+    partial class DropUserTable
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -151,6 +154,32 @@ namespace Todos.API.Migrations.TodosAuthDb
                         .HasDatabaseName("UserNameIndex");
 
                     b.ToTable("AspNetUsers", (string)null);
+
+                    b.HasData(
+                        new
+                        {
+                            Id = "a90f64ec-f26f-4a7c-a4aa-d720cd6edd2f",
+                            AccessFailedCount = 0,
+                            ConcurrencyStamp = "e27a72f8-0e56-4472-9abe-1f1af9cb7863",
+                            Email = "yairsadan1@gmail.com",
+                            EmailConfirmed = false,
+                            LockoutEnabled = false,
+                            PhoneNumberConfirmed = false,
+                            SecurityStamp = "5226bce5-573c-47da-8012-32d76f0d5759",
+                            TwoFactorEnabled = false
+                        },
+                        new
+                        {
+                            Id = "31bca60d-fea2-44da-a9fb-7c006c620469",
+                            AccessFailedCount = 0,
+                            ConcurrencyStamp = "6ca84395-d3a3-406f-86c4-d16141454941",
+                            Email = "hthrxsi123@gmail.com",
+                            EmailConfirmed = false,
+                            LockoutEnabled = false,
+                            PhoneNumberConfirmed = false,
+                            SecurityStamp = "7d8c748a-3bca-4240-8166-489fbbb7ab15",
+                            TwoFactorEnabled = false
+                        });
                 });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityUserClaim<string>", b =>

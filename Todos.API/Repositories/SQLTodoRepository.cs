@@ -36,7 +36,7 @@ public class SQLTodoRepository(TodosDbContext dbContext) : ITodoRepository
             else if (filterOn.Equals("Priority", StringComparison.OrdinalIgnoreCase))
                 todos = todos.Where(todo => EF.Functions.ILike(todo.Priority.Name, filterQuery));
             else if (filterOn.Equals("User", StringComparison.OrdinalIgnoreCase))
-                todos = todos.Where(todo => EF.Functions.ILike(todo.User.Name, filterQuery));
+                todos = todos.Where(todo => EF.Functions.ILike(todo.IdentityUser.UserName, filterQuery));
         }
 
         // Sorting
@@ -47,7 +47,7 @@ public class SQLTodoRepository(TodosDbContext dbContext) : ITodoRepository
             else if (sortBy.Equals("Priority", StringComparison.OrdinalIgnoreCase))
                 todos = isAscending ? todos.OrderBy(todo => todo.Priority.Name) : todos.OrderByDescending(todo => todo.Priority.Name);
             else if (sortBy.Equals("User", StringComparison.OrdinalIgnoreCase))
-                todos = isAscending ? todos.OrderBy(todo => todo.User.Name) : todos.OrderByDescending(todo => todo.User.Name);
+                todos = isAscending ? todos.OrderBy(todo => todo.IdentityUser.UserName) : todos.OrderByDescending(todo => todo.IdentityUser.UserName);
             else if (sortBy.Equals("Due", StringComparison.OrdinalIgnoreCase))
                 todos = isAscending ? todos.OrderBy(todo => todo.Due) : todos.OrderByDescending(todo => todo.Due);
         }
@@ -74,7 +74,7 @@ public class SQLTodoRepository(TodosDbContext dbContext) : ITodoRepository
         existingTodo.Priority = todo.Priority;
         existingTodo.Status = todo.Status;
         existingTodo.Due = todo.Due;
-        existingTodo.User = todo.User;
+        existingTodo.IdentityUser = todo.IdentityUser;
         await dbContext.SaveChangesAsync();
         return existingTodo;
     }

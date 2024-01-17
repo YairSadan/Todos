@@ -30,7 +30,7 @@ public class TokenRepository(IConfiguration configuration) : ITokenRepository
             configuration["Jwt:Issuer"],
             configuration["Jwt:Audience"],
             claims,
-            expires: DateTime.Now.AddMinutes(30),
+            expires: DateTime.Now.AddMinutes(60),
             signingCredentials: credentials
         );
 

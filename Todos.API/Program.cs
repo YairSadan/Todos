@@ -45,7 +45,6 @@ builder.Services.AddDbContext<TodosDbContext>(options => options.UseNpgsql(build
 
 builder.Services.AddDbContext<TodosAuthDbContext>(options => options.UseNpgsql(builder.Configuration.GetConnectionString("TodosAuthConnectionString")));
 
-builder.Services.AddScoped<IUserRepository, SQLUserRepository>();
 builder.Services.AddScoped<ITodoRepository, SQLTodoRepository>();
 builder.Services.AddScoped<ITokenRepository, TokenRepository>();
 
