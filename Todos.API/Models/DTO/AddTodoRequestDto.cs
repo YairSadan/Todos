@@ -16,8 +16,6 @@ public class AddTodoRequestDto
     [Required]
     public DateTime Due { get; set; }
     [Required]
-    public Guid UserId { get; set; }
-    [Required]
     public Guid PriorityId { get; set; }
     [Required]
     public Guid StatusId { get; set; }

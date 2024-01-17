@@ -16,7 +16,7 @@ namespace Todos.API.Controllers
         // POST: api/todos
         [HttpPost]
         [ValidateModel]
-        [Authorize(Roles = "Writer")]
+        [Authorize]
         public async Task<IActionResult> Create([FromBody] AddTodoRequestDto addTodoRequestDto)
         {
             var todoModel = mapper.Map<Todo>(addTodoRequestDto);
@@ -27,7 +27,7 @@ namespace Todos.API.Controllers
         // GET: api/todos
         // GET: api/todos?filterOn=Status/Priority/User&filterQuery=filterQuery&sortBy=Status/Priority/User/Due&isAscending=true/false&pageNumber=1&pageSize=10
         [HttpGet]
-        // [Authorize(Roles = "Writer, Reader")]
+        [Authorize]
         public async Task<IActionResult> GetAll([FromQuery] string? filterOn, [FromQuery] string? filterQuery, [FromQuery] string? sortBy, [FromQuery] bool? isAscending, [FromQuery] int pageNumber = 1, [FromQuery] int pageSize = 1000)
         {
             var todosModel = await todoRepository.GetAllAsync(filterOn, filterQuery, sortBy, isAscending ?? true, pageNumber, pageSize);

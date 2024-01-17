@@ -10,13 +10,13 @@ async function getData(): Promise<any> {
     method: 'GET',
     headers: {
       'Content-Type': 'application/json',
-      Authorization: `bearer yJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJodHRwOi8vc2NoZW1hcy54bWxzb2FwLm9yZy93cy8yMDA1LzA1L2lkZW50aXR5L2NsYWltcy9lbWFpbGFkZHJlc3MiOiJyZWFkZXJAZXhhbXBsZS5jb20iLCJodHRwOi8vc2NoZW1hcy5taWNyb3NvZnQuY29tL3dzLzIwMDgvMDYvaWRlbnRpdHkvY2xhaW1zL3JvbGUiOiJSZWFkZXIiLCJleHAiOjE3MDU1MDUzMzAsImlzcyI6Imh0dHBzOi8vbG9jYWxob3N0OjcxMTQvIiwiYXVkIjoiaHR0cHM6Ly9sb2NhbGhvc3Q6NzExNC8ifQ.ko36i6XXCFzVA7qUdzC7R2naCZJJ5GEfrB2N4oX6aog`,
+      Authorization: `Bearer ${sessionStorage.getItem('accessToken')}`,
     },
   });
   return await response.json();
 }
 
-export default function DemoPage() {
+export default function TodosPage() {
   const [data, setData] = useState<Todo[]>([]);
 
   useEffect(() => {
@@ -27,11 +27,12 @@ export default function DemoPage() {
         return todo;
       });
       setData(fetchedData);
+      console.log(fetchedData)
     });
   }, []);
 
   return (
-    <div className="hidden h-full flex-1 flex-col space-y-8 p-8 md:flex">
+    <div className="h-full flex-1 flex-col space-y-8 p-8 md:flex">
       <div className="flex items-center justify-between space-y-2">
         <div>
           <h2 className="text-2xl font-bold tracking-tight">Welcome back!</h2>

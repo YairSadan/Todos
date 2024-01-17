@@ -26,20 +26,22 @@ const LoginForm: React.FC = () => {
   const router = useRouter();
 
   const login = async (email: string, password: string) => {
-    const res = await fetch(`http://localhost:5160/api/auth/login`, {
+    const res = await fetch(`http://localhost:5160/login`, {
       method: 'POST',
+      credentials: 'include',
       headers: {
         'Content-Type': 'application/json',
       },
       body: JSON.stringify({
-        username: email,
+        email,
         password,
       }),
     });
     const data = await res.json();
-    if (data) {
-      const { jwtToken } = data;
-      sessionStorage.setItem('jwt', jwtToken);
+    if (res.status === 200) {
+      const { accessToken, refreshToken} = data;
+      sessionStorage.setItem('accessToken', accessToken);
+      sessionStorage.setItem('refreshToken', refreshToken);
       router.push('/todos');
     }
     // TODO add a wrong credentials modal

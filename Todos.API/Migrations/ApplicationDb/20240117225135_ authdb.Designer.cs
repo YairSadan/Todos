@@ -9,11 +9,11 @@ using Todos.API;
 
 #nullable disable
 
-namespace Todos.API.Migrations.TodosAuthDb
+namespace Todos.API.Migrations.ApplicationDb
 {
-    [DbContext(typeof(TodosAuthDbContext))]
-    [Migration("20240117175020_Drop User Table")]
-    partial class DropUserTable
+    [DbContext(typeof(ApplicationDbContext))]
+    [Migration("20240117225135_ authdb")]
+    partial class authdb
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -49,22 +49,6 @@ namespace Todos.API.Migrations.TodosAuthDb
                         .HasDatabaseName("RoleNameIndex");
 
                     b.ToTable("AspNetRoles", (string)null);
-
-                    b.HasData(
-                        new
-                        {
-                            Id = "481f50da-b7a6-4bd2-8d2d-5c0caff3a591",
-                            ConcurrencyStamp = "481f50da-b7a6-4bd2-8d2d-5c0caff3a591",
-                            Name = "Member",
-                            NormalizedName = "MEMBER"
-                        },
-                        new
-                        {
-                            Id = "1d27ea1d-2d8b-49c2-ab35-f8837ae19289",
-                            ConcurrencyStamp = "1d27ea1d-2d8b-49c2-ab35-f8837ae19289",
-                            Name = "Manager",
-                            NormalizedName = "MANAGER"
-                        });
                 });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRoleClaim<string>", b =>
@@ -154,32 +138,6 @@ namespace Todos.API.Migrations.TodosAuthDb
                         .HasDatabaseName("UserNameIndex");
 
                     b.ToTable("AspNetUsers", (string)null);
-
-                    b.HasData(
-                        new
-                        {
-                            Id = "a90f64ec-f26f-4a7c-a4aa-d720cd6edd2f",
-                            AccessFailedCount = 0,
-                            ConcurrencyStamp = "e27a72f8-0e56-4472-9abe-1f1af9cb7863",
-                            Email = "yairsadan1@gmail.com",
-                            EmailConfirmed = false,
-                            LockoutEnabled = false,
-                            PhoneNumberConfirmed = false,
-                            SecurityStamp = "5226bce5-573c-47da-8012-32d76f0d5759",
-                            TwoFactorEnabled = false
-                        },
-                        new
-                        {
-                            Id = "31bca60d-fea2-44da-a9fb-7c006c620469",
-                            AccessFailedCount = 0,
-                            ConcurrencyStamp = "6ca84395-d3a3-406f-86c4-d16141454941",
-                            Email = "hthrxsi123@gmail.com",
-                            EmailConfirmed = false,
-                            LockoutEnabled = false,
-                            PhoneNumberConfirmed = false,
-                            SecurityStamp = "7d8c748a-3bca-4240-8166-489fbbb7ab15",
-                            TwoFactorEnabled = false
-                        });
                 });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityUserClaim<string>", b =>

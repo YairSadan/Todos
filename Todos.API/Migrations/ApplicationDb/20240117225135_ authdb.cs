@@ -4,12 +4,10 @@ using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 
 #nullable disable
 
-#pragma warning disable CA1814 // Prefer jagged arrays over multidimensional
-
-namespace Todos.API.Migrations.TodosAuthDb
+namespace Todos.API.Migrations.ApplicationDb
 {
     /// <inheritdoc />
-    public partial class CreatingAuthDatabase : Migration
+    public partial class authdb : Migration
     {
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)
@@ -157,15 +155,6 @@ namespace Todos.API.Migrations.TodosAuthDb
                         principalTable: "AspNetUsers",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
-                });
-
-            migrationBuilder.InsertData(
-                table: "AspNetRoles",
-                columns: new[] { "Id", "ConcurrencyStamp", "Name", "NormalizedName" },
-                values: new object[,]
-                {
-                    { "1d27ea1d-2d8b-49c2-ab35-f8837ae19289", "1d27ea1d-2d8b-49c2-ab35-f8837ae19289", "Writer", "WRITER" },
-                    { "481f50da-b7a6-4bd2-8d2d-5c0caff3a591", "481f50da-b7a6-4bd2-8d2d-5c0caff3a591", "Reader", "READER" }
                 });
 
             migrationBuilder.CreateIndex(

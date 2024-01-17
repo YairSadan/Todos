@@ -2,21 +2,18 @@
 using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
-using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 using Todos.API;
 
 #nullable disable
 
-namespace Todos.API.Migrations.TodosAuthDb
+namespace Todos.API.Migrations.ApplicationDb
 {
-    [DbContext(typeof(TodosAuthDbContext))]
-    [Migration("20240117180947_Fix")]
-    partial class Fix
+    [DbContext(typeof(ApplicationDbContext))]
+    partial class ApplicationDbContextModelSnapshot : ModelSnapshot
     {
-        /// <inheritdoc />
-        protected override void BuildTargetModel(ModelBuilder modelBuilder)
+        protected override void BuildModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -49,22 +46,6 @@ namespace Todos.API.Migrations.TodosAuthDb
                         .HasDatabaseName("RoleNameIndex");
 
                     b.ToTable("AspNetRoles", (string)null);
-
-                    b.HasData(
-                        new
-                        {
-                            Id = "481f50da-b7a6-4bd2-8d2d-5c0caff3a591",
-                            ConcurrencyStamp = "481f50da-b7a6-4bd2-8d2d-5c0caff3a591",
-                            Name = "Member",
-                            NormalizedName = "MEMBER"
-                        },
-                        new
-                        {
-                            Id = "1d27ea1d-2d8b-49c2-ab35-f8837ae19289",
-                            ConcurrencyStamp = "1d27ea1d-2d8b-49c2-ab35-f8837ae19289",
-                            Name = "Manager",
-                            NormalizedName = "MANAGER"
-                        });
                 });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRoleClaim<string>", b =>

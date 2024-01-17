@@ -10,7 +10,6 @@ public class TodoDto
     public string? Description { get; set; }
     public DateTime CreatedOn { get; set; }
     public DateTime Due { get; set; }
-    public IdentityUser User { get; set; }
     public PriorityDto Priority { get; set; }
     public StatusDto Status { get; set; }
 }
