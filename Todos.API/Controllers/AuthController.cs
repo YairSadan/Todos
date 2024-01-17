@@ -51,10 +51,11 @@ public class AuthController(UserManager<IdentityUser> userManager, ITokenReposit
                 var roles = await userManager.GetRolesAsync(user);
                 if (roles != null)
                 {
-                    var jwtToken = tokenRepository.CreateJWTToken(user, roles.ToList());
+                    var jwtToken = tokenRepository.CreateJWTToken(user, [.. roles]);
                     var response = new LoginResponseDto
                     {
-                        JwtToken = jwtToken
+                        JwtToken = jwtToken,
+                        UserId = user.Id
                     };
                     return Ok(response);
                 }
