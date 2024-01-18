@@ -4,10 +4,12 @@ using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 
 #nullable disable
 
-namespace Todos.API.Migrations.ApplicationDb
+#pragma warning disable CA1814 // Prefer jagged arrays over multidimensional
+
+namespace Todos.API.Migrations
 {
     /// <inheritdoc />
-    public partial class authdb : Migration
+    public partial class fix : Migration
     {
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)
@@ -49,6 +51,30 @@ namespace Todos.API.Migrations.ApplicationDb
                 constraints: table =>
                 {
                     table.PrimaryKey("PK_AspNetUsers", x => x.Id);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "Priorities",
+                columns: table => new
+                {
+                    Id = table.Column<Guid>(type: "uuid", nullable: false),
+                    Name = table.Column<string>(type: "text", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_Priorities", x => x.Id);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "Statuses",
+                columns: table => new
+                {
+                    Id = table.Column<Guid>(type: "uuid", nullable: false),
+                    Name = table.Column<string>(type: "text", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_Statuses", x => x.Id);
                 });
 
             migrationBuilder.CreateTable(
@@ -157,6 +183,58 @@ namespace Todos.API.Migrations.ApplicationDb
                         onDelete: ReferentialAction.Cascade);
                 });
 
+            migrationBuilder.CreateTable(
+                name: "Todos",
+                columns: table => new
+                {
+                    Id = table.Column<Guid>(type: "uuid", nullable: false),
+                    Title = table.Column<string>(type: "text", nullable: false),
+                    Description = table.Column<string>(type: "text", nullable: true),
+                    CreatedOn = table.Column<DateTime>(type: "timestamp with time zone", nullable: false),
+                    Due = table.Column<DateTime>(type: "timestamp with time zone", nullable: false),
+                    PriorityId = table.Column<Guid>(type: "uuid", nullable: false),
+                    StatusId = table.Column<Guid>(type: "uuid", nullable: false),
+                    UserEmail = table.Column<string>(type: "text", nullable: true)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_Todos", x => x.Id);
+                    table.ForeignKey(
+                        name: "FK_Todos_Priorities_PriorityId",
+                        column: x => x.PriorityId,
+                        principalTable: "Priorities",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
+                    table.ForeignKey(
+                        name: "FK_Todos_Statuses_StatusId",
+                        column: x => x.StatusId,
+                        principalTable: "Statuses",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
+                });
+
+            migrationBuilder.InsertData(
+                table: "Priorities",
+                columns: new[] { "Id", "Name" },
+                values: new object[,]
+                {
+                    { new Guid("24a11bab-3f79-46d6-b523-105775634dc7"), "Low" },
+                    { new Guid("71fcc481-e946-4c76-acca-06a02b540453"), "High" },
+                    { new Guid("7308fad5-ccf2-49ed-bcd5-cf35ac147abf"), "Critical" },
+                    { new Guid("8e5ab86b-0ff0-45bb-9478-c9f154fec4c1"), "Medium" }
+                });
+
+            migrationBuilder.InsertData(
+                table: "Statuses",
+                columns: new[] { "Id", "Name" },
+                values: new object[,]
+                {
+                    { new Guid("4bdcc014-791f-481a-91b5-892bec8d36b3"), "In Progress" },
+                    { new Guid("c4a55655-87b6-4579-9eec-4dc4d011f6b1"), "Done" },
+                    { new Guid("e1527379-a581-4768-8705-ae332d045cb4"), "Pending" },
+                    { new Guid("ef97ff6b-2330-4492-b349-1c74e2ef3d12"), "Canceled" }
+                });
+
             migrationBuilder.CreateIndex(
                 name: "IX_AspNetRoleClaims_RoleId",
                 table: "AspNetRoleClaims",
@@ -193,6 +271,16 @@ namespace Todos.API.Migrations.ApplicationDb
                 table: "AspNetUsers",
                 column: "NormalizedUserName",
                 unique: true);
+
+            migrationBuilder.CreateIndex(
+                name: "IX_Todos_PriorityId",
+                table: "Todos",
+                column: "PriorityId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_Todos_StatusId",
+                table: "Todos",
+                column: "StatusId");
         }
 
         /// <inheritdoc />
@@ -214,10 +302,19 @@ namespace Todos.API.Migrations.ApplicationDb
                 name: "AspNetUserTokens");
 
             migrationBuilder.DropTable(
+                name: "Todos");
+
+            migrationBuilder.DropTable(
                 name: "AspNetRoles");
 
             migrationBuilder.DropTable(
                 name: "AspNetUsers");
+
+            migrationBuilder.DropTable(
+                name: "Priorities");
+
+            migrationBuilder.DropTable(
+                name: "Statuses");
         }
     }
 }

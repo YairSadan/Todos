@@ -1,90 +1,39 @@
-using System.Text;
-using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
-using Microsoft.IdentityModel.Tokens;
 using Todos.API;
 using Todos.API.Data;
 using Microsoft.OpenApi.Models;
 
 var builder = WebApplication.CreateBuilder(args);
 
-// Add services to the container.
-
 builder.Services.AddControllers();
-// Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen(options =>
 {
     options.SwaggerDoc("v1", new OpenApiInfo { Title = "Todos.API", Version = "v1" });
-    options.AddSecurityDefinition(JwtBearerDefaults.AuthenticationScheme, new OpenApiSecurityScheme
-    {
-        Name = "Authorization",
-        In = ParameterLocation.Header,
-        Type = SecuritySchemeType.ApiKey,
-        Scheme = JwtBearerDefaults.AuthenticationScheme,
-    });
-
-    options.AddSecurityRequirement(new OpenApiSecurityRequirement{
-        {
-            new OpenApiSecurityScheme{
-                Reference = new OpenApiReference{
-                    Type = ReferenceType.SecurityScheme,
-                    Id = JwtBearerDefaults.AuthenticationScheme
-                },
-                Scheme = "oauth2",
-                Name = JwtBearerDefaults.AuthenticationScheme,
-                In = ParameterLocation.Header
-            },
-            new List<string>()
-        }
-    });
 });
 
+builder.Services.AddAuthentication().AddBearerToken(IdentityConstants.BearerScheme);
+builder.Services.AddAuthorizationBuilder();
+
 builder.Services.AddDbContext<TodosDbContext>(options => options.UseNpgsql(builder.Configuration.GetConnectionString("TodosConnectionString")));
-builder.Services.AddDbContext<ApplicationDbContext>(options => options.UseNpgsql(builder.Configuration.GetConnectionString("IdentityConnectionString")));
-builder.Services.AddAuthorization();
-builder.Services.AddIdentityApiEndpoints<IdentityUser>().AddEntityFrameworkStores<ApplicationDbContext>();
+
+builder.Services.AddIdentityCore<MyUser>().AddEntityFrameworkStores<TodosDbContext>().AddApiEndpoints();
+
 builder.Services.AddScoped<ITodoRepository, SQLTodoRepository>();
 
 builder.Services.AddAutoMapper(typeof(AutoMapperProfiles));
 
-// builder.Services.Configure<IdentityOptions>(options =>
-// {
-//     options.Password.RequireDigit = false;
-//     options.Password.RequireLowercase = false;
-//     options.Password.RequireNonAlphanumeric = false;
-//     options.Password.RequireUppercase = false;
-//     options.Password.RequiredLength = 6;
-// });
-
-// builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
-// .AddJwtBearer(options => options.TokenValidationParameters = new TokenValidationParameters
-// {
-//     ValidateIssuer = true,
-//     ValidateAudience = true,
-//     ValidateLifetime = true,
-//     ValidateIssuerSigningKey = true,
-//     ValidIssuer = builder.Configuration["Jwt:Issuer"],
-//     ValidAudience = builder.Configuration["Jwt:Audience"],
-//     IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(builder.Configuration["Jwt:Key"]))
-// });
-
 var app = builder.Build();
 
-app.MapIdentityApi<IdentityUser>();
-// Configure the HTTP request pipeline.
+app.MapIdentityApi<MyUser>();
+
 if (app.Environment.IsDevelopment())
 {
     app.UseSwagger();
     app.UseSwaggerUI();
 }
 app.UseCors(options => options.WithOrigins("http://localhost:3000").AllowAnyMethod().AllowAnyHeader().AllowCredentials());
-
-app.UseHttpsRedirection();
-
-// app.UseAuthentication();
-// app.UseAuthorization();
 
 app.MapControllers();
 

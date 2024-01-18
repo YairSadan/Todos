@@ -12,9 +12,9 @@ public class AddTodoRequestDto
     [MaxLength(1000, ErrorMessage = "Description cannot be more than 1000 characters long")]
     public string? Description { get; set; }
     [Required]
-    public DateTime CreatedOn { get; set; }
-    [Required]
     public DateTime Due { get; set; }
+    [Required]
+    public Guid MyUserId { get; set; }
     [Required]
     public Guid PriorityId { get; set; }
     [Required]

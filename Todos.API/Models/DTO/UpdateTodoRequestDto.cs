@@ -14,7 +14,7 @@ public class UpdateTodoRequestDto
     [Required]
     public DateTime Due { get; set; }
     [Required]
-    public Guid UserId { get; set; }
+    public Guid MyUserId { get; set; }
     [Required]
     public Guid PriorityId { get; set; }
     [Required]

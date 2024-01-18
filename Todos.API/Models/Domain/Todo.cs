@@ -10,6 +10,7 @@ public class Todo
     public DateTime Due { get; set; }
     public Guid PriorityId { get; set; }
     public Guid StatusId { get; set; }
+    public string? UserEmail { get; set; }
     public Priority Priority { get; set; }
     public Status Status { get; set; }
 }

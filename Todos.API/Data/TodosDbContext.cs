@@ -1,8 +1,9 @@
-﻿using Microsoft.EntityFrameworkCore;
+﻿using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore;
 using Todos.API.Models.Domain;
 
 namespace Todos.API.Data;
-public class TodosDbContext(DbContextOptions<TodosDbContext> dbContextOptions) : DbContext(dbContextOptions)
+public class TodosDbContext(DbContextOptions<TodosDbContext> dbContextOptions) : IdentityDbContext<MyUser>(dbContextOptions)
 {
     public DbSet<Todo> Todos { get; set; }
     public DbSet<Priority> Priorities { get; set; }
