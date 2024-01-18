@@ -12,6 +12,7 @@ public class AutoMapperProfiles: Profile
         CreateMap<UpdateTodoRequestDto, Todo>().ReverseMap();
         CreateMap<Priority, PriorityDto>().ReverseMap();
         CreateMap<Status, StatusDto>().ReverseMap();
+        CreateMap<MyUser, MyUserDto>().ReverseMap();
     }
 
 }

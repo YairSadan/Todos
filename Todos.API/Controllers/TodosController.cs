@@ -37,7 +37,7 @@ namespace Todos.API.Controllers
         // GET: api/todos/{id}
         [HttpGet]
         [Route("{id:Guid}")]
-        [Authorize(Roles = "Reader")]
+        [Authorize]
         public async Task<IActionResult> GetById([FromRoute] Guid id)
         {
             var todoModel = await todoRepository.GetByIdAsync(id);
@@ -50,7 +50,7 @@ namespace Todos.API.Controllers
         [HttpPut]
         [Route("{id:Guid}")]
         [ValidateModel]
-        [Authorize(Roles = "Writer")]
+        [Authorize]
         public async Task<IActionResult> Update([FromRoute] Guid id, [FromBody] UpdateTodoRequestDto updateTodoRequestDto)
         {
             var todoModel = mapper.Map<Todo>(updateTodoRequestDto);
@@ -63,7 +63,7 @@ namespace Todos.API.Controllers
         // DELETE: api/todos/{id}
         [HttpDelete]
         [Route("{id:Guid}")]
-        [Authorize(Roles = "Writer")]
+        [Authorize]
         public async Task<IActionResult> Delete([FromRoute] Guid id)
         {
             var deletedTodoModel = await todoRepository.DeleteAsync(id);

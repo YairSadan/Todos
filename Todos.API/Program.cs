@@ -21,6 +21,7 @@ builder.Services.AddDbContext<TodosDbContext>(options => options.UseNpgsql(build
 builder.Services.AddIdentityCore<MyUser>().AddEntityFrameworkStores<TodosDbContext>().AddApiEndpoints();
 
 builder.Services.AddScoped<ITodoRepository, SQLTodoRepository>();
+builder.Services.AddScoped<IMyUserRepository, SQLMyUserRepository>();
 
 builder.Services.AddAutoMapper(typeof(AutoMapperProfiles));
 

@@ -35,6 +35,9 @@ public class SQLTodoRepository(TodosDbContext dbContext) : ITodoRepository
                 todos = todos.Where(todo => EF.Functions.ILike(todo.Status.Name, filterQuery));
             else if (filterOn.Equals("Priority", StringComparison.OrdinalIgnoreCase))
                 todos = todos.Where(todo => EF.Functions.ILike(todo.Priority.Name, filterQuery));
+            else if (filterOn.Equals("User", StringComparison.OrdinalIgnoreCase))
+                todos = todos.Where(todo => EF.Functions.ILike(todo.MyUser.UserName, filterQuery));
+
         }
 
         // Sorting

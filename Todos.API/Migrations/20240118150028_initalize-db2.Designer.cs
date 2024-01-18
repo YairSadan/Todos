@@ -12,8 +12,8 @@ using Todos.API.Data;
 namespace Todos.API.Migrations
 {
     [DbContext(typeof(TodosDbContext))]
-    [Migration("20240118142603_initalize-db")]
-    partial class initalizedb
+    [Migration("20240118150028_initalize-db2")]
+    partial class initalizedb2
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -259,6 +259,20 @@ namespace Todos.API.Migrations
                         .HasDatabaseName("UserNameIndex");
 
                     b.ToTable("AspNetUsers", (string)null);
+
+                    b.HasData(
+                        new
+                        {
+                            Id = "e1527379-a581-4768-8705-ae332d045cb4",
+                            AccessFailedCount = 0,
+                            ConcurrencyStamp = "7f5d5861-d9e3-4978-a1ee-bbfa71f985a7",
+                            EmailConfirmed = false,
+                            LockoutEnabled = false,
+                            PhoneNumberConfirmed = false,
+                            SecurityStamp = "b00fe0dc-242f-4bd7-beb3-30965c246c62",
+                            TwoFactorEnabled = false,
+                            UserName = "user1"
+                        });
                 });
 
             modelBuilder.Entity("Todos.API.Priority", b =>
