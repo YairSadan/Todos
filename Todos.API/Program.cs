@@ -22,6 +22,8 @@ builder.Services.AddIdentityCore<MyUser>().AddEntityFrameworkStores<TodosDbConte
 
 builder.Services.AddScoped<ITodoRepository, SQLTodoRepository>();
 builder.Services.AddScoped<IMyUserRepository, SQLMyUserRepository>();
+builder.Services.AddScoped<IPriorityRepository, SQLPriorityRepository>();
+builder.Services.AddScoped<IStatusRepository, SQLStatusRepository>();
 
 builder.Services.AddAutoMapper(typeof(AutoMapperProfiles));
 
