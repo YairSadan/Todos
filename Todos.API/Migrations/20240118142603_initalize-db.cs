@@ -9,7 +9,7 @@ using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 namespace Todos.API.Migrations
 {
     /// <inheritdoc />
-    public partial class fix : Migration
+    public partial class initalizedb : Migration
     {
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)
@@ -192,13 +192,19 @@ namespace Todos.API.Migrations
                     Description = table.Column<string>(type: "text", nullable: true),
                     CreatedOn = table.Column<DateTime>(type: "timestamp with time zone", nullable: false),
                     Due = table.Column<DateTime>(type: "timestamp with time zone", nullable: false),
+                    MyUserId = table.Column<string>(type: "text", nullable: false),
                     PriorityId = table.Column<Guid>(type: "uuid", nullable: false),
-                    StatusId = table.Column<Guid>(type: "uuid", nullable: false),
-                    UserEmail = table.Column<string>(type: "text", nullable: true)
+                    StatusId = table.Column<Guid>(type: "uuid", nullable: false)
                 },
                 constraints: table =>
                 {
                     table.PrimaryKey("PK_Todos", x => x.Id);
+                    table.ForeignKey(
+                        name: "FK_Todos_AspNetUsers_MyUserId",
+                        column: x => x.MyUserId,
+                        principalTable: "AspNetUsers",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
                     table.ForeignKey(
                         name: "FK_Todos_Priorities_PriorityId",
                         column: x => x.PriorityId,
@@ -271,6 +277,11 @@ namespace Todos.API.Migrations
                 table: "AspNetUsers",
                 column: "NormalizedUserName",
                 unique: true);
+
+            migrationBuilder.CreateIndex(
+                name: "IX_Todos_MyUserId",
+                table: "Todos",
+                column: "MyUserId");
 
             migrationBuilder.CreateIndex(
                 name: "IX_Todos_PriorityId",

@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Identity;
+﻿using System.ComponentModel.DataAnnotations.Schema;
+using Microsoft.AspNetCore.Identity;
 
 namespace Todos.API.Models.Domain;
 public class Todo
@@ -8,9 +9,11 @@ public class Todo
     public string? Description { get; set; }
     public DateTime CreatedOn { get; set; }
     public DateTime Due { get; set; }
+    [ForeignKey(nameof(MyUser))]
+    public string MyUserId { get; set; }
     public Guid PriorityId { get; set; }
     public Guid StatusId { get; set; }
-    public string? UserEmail { get; set; }
+    public MyUser MyUser { get; set; }
     public Priority Priority { get; set; }
     public Status Status { get; set; }
 }

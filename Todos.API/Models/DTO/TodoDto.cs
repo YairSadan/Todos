@@ -1,7 +1,4 @@
-﻿using Microsoft.AspNetCore.Identity;
-using Todos.API.Models.Domain;
-
-namespace Todos.API;
+﻿namespace Todos.API;
 
 public class TodoDto
 {

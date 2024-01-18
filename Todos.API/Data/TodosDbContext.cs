@@ -8,6 +8,7 @@ public class TodosDbContext(DbContextOptions<TodosDbContext> dbContextOptions) :
     public DbSet<Todo> Todos { get; set; }
     public DbSet<Priority> Priorities { get; set; }
     public DbSet<Status> Statuses { get; set; }
+    public DbSet<MyUser> MyUsers { get; set; }
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {

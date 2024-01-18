@@ -169,6 +169,10 @@ namespace Todos.API.Migrations
                     b.Property<DateTime>("Due")
                         .HasColumnType("timestamp with time zone");
 
+                    b.Property<string>("MyUserId")
+                        .IsRequired()
+                        .HasColumnType("text");
+
                     b.Property<Guid>("PriorityId")
                         .HasColumnType("uuid");
 
@@ -179,10 +183,9 @@ namespace Todos.API.Migrations
                         .IsRequired()
                         .HasColumnType("text");
 
-                    b.Property<string>("UserEmail")
-                        .HasColumnType("text");
-
                     b.HasKey("Id");
+
+                    b.HasIndex("MyUserId");
 
                     b.HasIndex("PriorityId");
 
@@ -382,6 +385,12 @@ namespace Todos.API.Migrations
 
             modelBuilder.Entity("Todos.API.Models.Domain.Todo", b =>
                 {
+                    b.HasOne("Todos.API.MyUser", "MyUser")
+                        .WithMany("Todos")
+                        .HasForeignKey("MyUserId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
                     b.HasOne("Todos.API.Priority", "Priority")
                         .WithMany()
                         .HasForeignKey("PriorityId")
@@ -394,9 +403,16 @@ namespace Todos.API.Migrations
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
+                    b.Navigation("MyUser");
+
                     b.Navigation("Priority");
 
                     b.Navigation("Status");
+                });
+
+            modelBuilder.Entity("Todos.API.MyUser", b =>
+                {
+                    b.Navigation("Todos");
                 });
 #pragma warning restore 612, 618
         }
