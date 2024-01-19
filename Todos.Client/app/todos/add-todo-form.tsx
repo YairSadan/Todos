@@ -5,7 +5,6 @@ import { format } from 'date-fns';
 import {
   Form,
   FormControl,
-  FormDescription,
   FormField,
   FormItem,
   FormLabel,
@@ -20,36 +19,10 @@ import { CalendarIcon } from '@radix-ui/react-icons';
 import React from 'react';
 import { useForm } from 'react-hook-form';
 import { z } from 'zod';
-import {
-  Command,
-  CommandEmpty,
-  CommandGroup,
-  CommandInput,
-  CommandItem,
-} from '@/components/ui/command';
-import { Check, ChevronsUpDown } from 'lucide-react';
-const getUsers = async () => {
-    const res = await fetch(`http://localhost:5160/users`, {
-        method: 'GET',
-        credentials: 'include',
-        headers: {
-        'Content-Type': 'application/json',
-        },
-    });
-    const data = await res.json();
-    return data;
-};
-const getStatuses = async () => {
-    const res = await fetch(`http://localhost:5160/statuses`, {
-        method: 'GET',
-        credentials: 'include',
-        headers: {
-        'Content-Type': 'application/json',
-        },
-    });
-    const data = await res.json();
-    return data;
-}
+import FormUserInput from './form-user-input';
+import FormStatusInput from './form-status-input';
+import FormPriorityInput from './form-priority-input';
+
 const formSchema = z.object({
   title: z.string().min(2).max(50),
   description: z.string().optional(),
@@ -73,7 +46,14 @@ export default function AddTodoForm() {
   });
 
   function onSubmit(values: z.infer<typeof formSchema>) {
-    console.log(values);
+    fetch(`http://localhost:5160/api/todos`, { // todo: add to actions
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+        authorization: 'Bearer ' + sessionStorage.getItem('accessToken'),
+      },
+      body: JSON.stringify(values),
+    })
   }
 
   return (
@@ -140,87 +120,9 @@ export default function AddTodoForm() {
             </FormItem>
           )}
         />
-        <FormField
-          control={form.control}
-          name="myUserId"
-          render={({ field }) => (
-            <FormItem className="flex flex-col">
-              <FormLabel>Language</FormLabel>
-              <Popover>
-                <PopoverTrigger asChild>
-                  <FormControl>
-                    <Button
-                      variant="outline"
-                      role="combobox"
-                      className={cn(
-                        'w-[200px] justify-between',
-                        !field.value && 'text-muted-foreground'
-                      )}>
-                      {field.value
-                        ? languages.find((language) => language.value === field.value)?.label
-                        : 'Select language'}
-                      <ChevronsUpDown className="ml-2 h-4 w-4 shrink-0 opacity-50" />
-                    </Button>
-                  </FormControl>
-                </PopoverTrigger>
-                <PopoverContent className="w-[200px] p-0">
-                  <Command>
-                    <CommandInput placeholder="Search language..." />
-                    <CommandEmpty>No language found.</CommandEmpty>
-                    <CommandGroup>
-                      {languages.map((language) => (
-                        <CommandItem
-                          value={language.label}
-                          key={language.value}
-                          onSelect={() => {
-                            form.setValue('language', language.value);
-                          }}>
-                          <Check
-                            className={cn(
-                              'mr-2 h-4 w-4',
-                              language.value === field.value ? 'opacity-100' : 'opacity-0'
-                            )}
-                          />
-                          {language.label}
-                        </CommandItem>
-                      ))}
-                    </CommandGroup>
-                  </Command>
-                </PopoverContent>
-              </Popover>
-              <FormDescription>
-                This is the language that will be used in the dashboard.
-              </FormDescription>
-              <FormMessage />
-            </FormItem>
-          )}
-        />
-        <FormField
-          control={form.control}
-          name="title"
-          render={({ field }) => (
-            <FormItem>
-              <FormLabel>Title</FormLabel>
-              <FormControl>
-                <Input placeholder="Israel" {...field} />
-              </FormControl>
-              <FormMessage />
-            </FormItem>
-          )}
-        />
-        <FormField
-          control={form.control}
-          name="title"
-          render={({ field }) => (
-            <FormItem>
-              <FormLabel>Title</FormLabel>
-              <FormControl>
-                <Input placeholder="Israel" {...field} />
-              </FormControl>
-              <FormMessage />
-            </FormItem>
-          )}
-        />
+        <FormUserInput form={form} />
+        <FormStatusInput form={form} />
+        <FormPriorityInput form={form} />
         <DialogFooter>
           <Button type="submit">Add Todo</Button>
         </DialogFooter>

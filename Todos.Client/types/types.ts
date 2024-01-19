@@ -1,4 +1,3 @@
-import { ReactNode } from 'react';
 
 export type Todo = {
   id: string;
@@ -6,21 +5,24 @@ export type Todo = {
   description: string | null;
   createdOn: Date;
   due: Date;
-  user: User;
+  myUser: User;
   priority: Priority;
   status: Status;
 };
 export type User = {
   id: string;
-  name: String;
+  userName: string;
+  email: string;
 };
 export type Priority = {
   value: string;
   label: string;
   icon: any;
+  id: string;
 };
 export type Status = {
   value: string;
   label: string;
   icon: any;
+  id: string;
 };

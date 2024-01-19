@@ -1,15 +1,13 @@
 'use client';
-
 import { Cross2Icon } from '@radix-ui/react-icons';
 import { Table } from '@tanstack/react-table';
-
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
-
-import { priorities, statuses } from '@/data/data';
 import { DataTableFacetedFilter } from './data-table-faceted-filter';
 import { DataTableViewOptions } from './data-table-view-options';
 import AddTodoDialog from './add-todo-dialog';
+import { useContext } from 'react';
+import { PrioritiesContext, StatusesContext } from '@/data/data';
 
 interface DataTableToolbarProps<TData> {
   table: Table<TData>;
@@ -17,7 +15,8 @@ interface DataTableToolbarProps<TData> {
 
 export function DataTableToolbar<TData>({ table }: DataTableToolbarProps<TData>) {
   const isFiltered = table.getState().columnFilters.length > 0;
-
+  const statuses = useContext(StatusesContext);
+  const priorities = useContext(PrioritiesContext);
   return (
     <div className="flex items-center justify-between">
       <div className="flex flex-1 items-center space-x-2">

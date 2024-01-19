@@ -1,10 +1,8 @@
-'use client';
+import { format } from 'date-fns';
 import { Checkbox } from '@/components/ui/checkbox';
 import { ColumnDef } from '@tanstack/react-table';
 import { DataTableColumnHeader } from './data-table-column-header';
-import { Badge } from '@/components/ui/badge';
 import { Todo } from '@/types/types';
-import { labels, priorities, statuses } from '@/data/data';
 import { DataTableRowActions } from './data-table-row-actions';
 
 export const columns: ColumnDef<Todo>[] = [
@@ -33,16 +31,7 @@ export const columns: ColumnDef<Todo>[] = [
   },
   {
     accessorKey: 'title',
-    header: ({ column }) => <DataTableColumnHeader column={column} title="Title" />,
-    cell: ({ row }) => {
-      const label = labels.find((label) => label.value === row.original.title);
-      return (
-        <div className="flex space-x2">
-          {label && <Badge variant="outline">{label.label}</Badge>}
-          <span className="max-w-[500px] truncate font-medium">{row.getValue('title')}</span>
-        </div>
-      );
-    },
+    header: 'Title',
   },
   {
     accessorKey: 'description',
@@ -52,12 +41,8 @@ export const columns: ColumnDef<Todo>[] = [
     accessorKey: 'priority',
     header: ({ column }) => <DataTableColumnHeader column={column} title="Priority" />,
     cell: ({ row }) => {
-      const priority = priorities.find((priority) => priority.value === row.getValue('priority'));
-
-      if (!priority) {
-        return null;
-      }
-
+      const priority = row.original.priority;
+      if (!priority) return null;
       return (
         <div className="flex items-center">
           {priority.icon && <priority.icon className="mr-2 h-4 w-4 text-muted-foreground" />}
@@ -73,7 +58,7 @@ export const columns: ColumnDef<Todo>[] = [
     accessorKey: 'status',
     header: ({ column }) => <DataTableColumnHeader column={column} title="Status" />,
     cell: ({ row }) => {
-      const status = statuses.find((status) => status.value == row.getValue('status'));
+      const status = row.original.status;
       if (!status) return null;
       return (
         <div className="flex w-[100px] items-center">
@@ -88,15 +73,37 @@ export const columns: ColumnDef<Todo>[] = [
   },
   {
     accessorKey: 'createdOn',
-    header: 'Created On',
+    header: ({ column }) => <DataTableColumnHeader column={column} title="Created On" />,
+    cell: ({ row }) => {
+      const createdOn = row.original.createdOn;
+      const createdDate = createdOn ? format(createdOn, 'MM/dd/yyyy') : null;
+      return <div className="flex items-center">{createdDate}</div>;
+    },
+    filterFn: (row, id, value) => {
+      //needs a test
+      const createdOn = row.original.createdOn;
+      const filterDate = value ? new Date(value) : null;
+      if (!createdOn || !filterDate) return false;
+      return createdOn.toDateString() === filterDate.toDateString();
+    },
   },
   {
     accessorKey: 'due',
-    header: 'Due',
+    header: ({ column }) => <DataTableColumnHeader column={column} title="Due" />,
+    cell: ({ row }) => {
+      const due = row.original.due;
+      const dueDate = due ? format(due, 'MM/dd/yyyy') : null;
+      return <div className="flex items-center">{dueDate}</div>;
+    },
   },
   {
-    accessorKey: 'user.name',
-    header: 'User',
+    accessorKey: 'user',
+    header: ({ column }) => <DataTableColumnHeader column={column} title="User" />,
+    cell: ({ row }) => {
+      const username = row.original.myUser.userName;
+      if (!username) return null;
+      return <div className="flex items-center">{username}</div>;
+    },
   },
   {
     id: 'actions',

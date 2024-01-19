@@ -1,5 +1,4 @@
 'use client';
-
 import {
   ColumnDef,
   ColumnFiltersState,
@@ -37,7 +36,6 @@ export function DataTable<TData, TValue>({ columns, data }: DataTableProps<TData
   const [columnVisibility, setColumnVisibility] = useState<VisibilityState>({});
   const [columnFilters, setColumnFilters] = useState<ColumnFiltersState>([]);
   const [sorting, setSorting] = useState<SortingState>([]);
-
   const table = useReactTable({
     data,
     columns,
@@ -59,7 +57,6 @@ export function DataTable<TData, TValue>({ columns, data }: DataTableProps<TData
     getFacetedRowModel: getFacetedRowModel(),
     getFacetedUniqueValues: getFacetedUniqueValues(),
   });
-
   return (
     <div className="space-y-4">
       <DataTableToolbar table={table} />

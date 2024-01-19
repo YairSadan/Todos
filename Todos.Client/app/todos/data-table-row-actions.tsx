@@ -8,8 +8,6 @@ import {
   DropdownMenu,
   DropdownMenuContent,
   DropdownMenuItem,
-  DropdownMenuRadioGroup,
-  DropdownMenuRadioItem,
   DropdownMenuSeparator,
   DropdownMenuShortcut,
   DropdownMenuSub,
@@ -19,7 +17,6 @@ import {
 } from '@/components/ui/dropdown-menu';
 
 // import { taskSchema } from '../data/schema';
-import { labels } from '@/data/data';
 
 interface DataTableRowActionsProps<TData> {
   row: Row<TData>;
