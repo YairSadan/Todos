@@ -59,26 +59,22 @@ export const getUsers = async (): Promise<User[]> => {
 const modifyStatus = (status: any): Status => {
   const modifiedStatus: Status = {
     label: status.name,
-    id: '',
-    value: '',
+    id: status.id,
+    value: status.name,
     icon: '',
   };
   switch (modifiedStatus.label) {
     case 'Pending':
       modifiedStatus.icon = QuestionMarkCircledIcon;
-      modifiedStatus.value = modifiedStatus.label;
       break;
     case 'In Progress':
       modifiedStatus.icon = StopwatchIcon;
-      modifiedStatus.value = modifiedStatus.label;
       break;
     case 'Done':
       modifiedStatus.icon = CheckCircledIcon;
-      modifiedStatus.value = modifiedStatus.label;
       break;
     case 'Canceled':
       modifiedStatus.icon = CrossCircledIcon;
-      modifiedStatus.value = modifiedStatus.label;
       break;
   }
   return modifiedStatus;
@@ -87,26 +83,22 @@ const modifyStatus = (status: any): Status => {
 const modifyPriority = (priority: any): Priority => {
   const modifiedPriority: Priority = {
     label: priority.name,
-    id: '',
-    value: '',
+    id: priority.id,
+    value: priority.name,
     icon: '',
   };
   switch (modifiedPriority.label) {
     case 'High':
       modifiedPriority.icon = ArrowTopRightIcon;
-      modifiedPriority.value = modifiedPriority.label;
       break;
     case 'Medium':
       modifiedPriority.icon = ArrowRightIcon;
-      modifiedPriority.value = modifiedPriority.label;
       break;
     case 'Low':
       modifiedPriority.icon = ArrowDownIcon;
-      modifiedPriority.value = modifiedPriority.label;
       break;
     case 'Critical':
       modifiedPriority.icon = ArrowUpIcon;
-      modifiedPriority.value = modifiedPriority.label;
       break;
   }
   return modifiedPriority;
