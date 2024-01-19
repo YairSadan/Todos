@@ -7,7 +7,7 @@ public class Todo
     public Guid Id { get; set; }
     public string Title { get; set; }
     public string? Description { get; set; }
-    public DateTime CreatedOn { get; set; }
+    public DateTime CreatedOn { get; set; } = DateTime.UtcNow;
     public DateTime Due { get; set; }
     [ForeignKey(nameof(MyUser))]
     public string MyUserId { get; set; }

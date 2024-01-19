@@ -7,8 +7,7 @@ public class TodoDto
     public string? Description { get; set; }
     public DateTime CreatedOn { get; set; }
     public DateTime Due { get; set; }
-    public Guid MyUserId { get; set; }
-    public MyUser MyUser { get; set; }
+    public MyUserDto MyUser { get; set; }
     public PriorityDto Priority { get; set; }
     public StatusDto Status { get; set; }
 }

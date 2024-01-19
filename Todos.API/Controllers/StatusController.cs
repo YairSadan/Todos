@@ -6,7 +6,6 @@ namespace Todos.API;
 
 [Route("api/[controller]")]
 [ApiController]
-[Authorize]
 public class StatusController(IMapper mapper, IStatusRepository statusRepository) : ControllerBase
 {
     private readonly IMapper mapper = mapper;

@@ -191,7 +191,7 @@ namespace Todos.API.Migrations
 
                     b.HasIndex("StatusId");
 
-                    b.ToTable("Todos");
+                    b.ToTable("Todos", (string)null);
                 });
 
             modelBuilder.Entity("Todos.API.MyUser", b =>
@@ -256,20 +256,6 @@ namespace Todos.API.Migrations
                         .HasDatabaseName("UserNameIndex");
 
                     b.ToTable("AspNetUsers", (string)null);
-
-                    b.HasData(
-                        new
-                        {
-                            Id = "e1527379-a581-4768-8705-ae332d045cb4",
-                            AccessFailedCount = 0,
-                            ConcurrencyStamp = "7f5d5861-d9e3-4978-a1ee-bbfa71f985a7",
-                            EmailConfirmed = false,
-                            LockoutEnabled = false,
-                            PhoneNumberConfirmed = false,
-                            SecurityStamp = "b00fe0dc-242f-4bd7-beb3-30965c246c62",
-                            TwoFactorEnabled = false,
-                            UserName = "user1"
-                        });
                 });
 
             modelBuilder.Entity("Todos.API.Priority", b =>
@@ -284,7 +270,7 @@ namespace Todos.API.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("Priorities");
+                    b.ToTable("Priorities", (string)null);
 
                     b.HasData(
                         new
@@ -321,7 +307,7 @@ namespace Todos.API.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("Statuses");
+                    b.ToTable("Statuses", (string)null);
 
                     b.HasData(
                         new

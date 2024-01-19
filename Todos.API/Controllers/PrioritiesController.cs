@@ -6,7 +6,6 @@ namespace Todos.API;
 
 [Route("api/[controller]")]
 [ApiController]
-[Authorize]
 public class PrioritiesController(IMapper mapper, IPriorityRepository priorityRepository) : ControllerBase
 {
     private readonly IMapper mapper = mapper;
