@@ -19,46 +19,7 @@ export const getTodos = async (): Promise<Todo[]> => {
     },
   });
   const data = await res.json();
-  const modifiedData: Todo[] = data.map((todo: any) => {
-    if (todo.priority.name === 'High') {
-      todo.priority.icon = ArrowTopRightIcon;
-      todo.priority.value = 2;
-      todo.priority.label = todo.priority.name;
-    } else if (todo.priority.name === 'Low') {
-      todo.priority.icon = ArrowDownIcon;
-      todo.priority.value = 4;
-      todo.priority.label = todo.priority.name;
-    } else if (todo.priority.name === 'Medium') {
-      todo.priority.icon = ArrowRightIcon;
-      todo.priority.value = 3;
-      todo.priority.label = todo.priority.name;
-    } else if (todo.priority.name === 'Critical') {
-      todo.priority.icon = ArrowUpIcon;
-      todo.priority.value = 1;
-      todo.priority.label = todo.priority.name;
-    }
-
-    if (todo.status.name === 'Pending') {
-      todo.status.icon = QuestionMarkCircledIcon;
-      todo.status.value = 4;
-      todo.status.label = todo.status.name;
-    } else if (todo.status.name === 'In Progress') {
-      todo.status.icon = StopwatchIcon;
-      todo.status.value = 3;
-      todo.status.label = todo.status.name;
-    } else if (todo.status.name === 'Done') {
-      todo.status.icon = CheckCircledIcon;
-      todo.status.value = 2;
-      todo.status.label = todo.status.name;
-    } else if (todo.status.name === 'Canceled') {
-      todo.status.icon = CrossCircledIcon;
-      todo.status.value = 1;
-      todo.status.label = todo.status.name;
-    }
-
-    return todo;
-  });
-  return modifiedData;
+  return data.map((todo: any) => modifyTodo(todo));
 };
 
 export const getPriorities = async (): Promise<Priority[]> => {
@@ -69,17 +30,7 @@ export const getPriorities = async (): Promise<Priority[]> => {
     },
   });
   const data = await res.json();
-  const modifiedData = data.map((priority: any) => ({
-    label: priority.name,
-    id: priority.id,
-  }));
-  modifiedData.forEach((priority: Priority) => {
-    if (priority.label === 'High') priority.icon = ArrowTopRightIcon;
-    else if (priority.label === 'Low') priority.icon = ArrowDownIcon;
-    else if (priority.label === 'Medium') priority.icon = ArrowRightIcon;
-    else if (priority.label === 'Critical') priority.icon = ArrowUpIcon;
-  });
-  return modifiedData;
+  return data.map((priority: any) => modifyPriority(priority));
 };
 
 export const getStatuses = async (): Promise<Status[]> => {
@@ -90,17 +41,7 @@ export const getStatuses = async (): Promise<Status[]> => {
     },
   });
   const data = await res.json();
-  const modifiedData = data.map((status: any) => ({
-    label: status.name,
-    id: status.id,
-  }));
-  modifiedData.forEach((status: Status) => {
-    if (status.label === 'Pending') status.icon = QuestionMarkCircledIcon;
-    else if (status.label === 'In Progress') status.icon = StopwatchIcon;
-    else if (status.label === 'Done') status.icon = CheckCircledIcon;
-    else if (status.label === 'Canceled') status.icon = CrossCircledIcon;
-  });
-  return modifiedData;
+  return data.map((status: any) => modifyStatus(status));
 };
 
 export const getUsers = async (): Promise<User[]> => {
@@ -112,5 +53,84 @@ export const getUsers = async (): Promise<User[]> => {
     },
   });
   const data = await res.json();
-  return data;
+  return data.map((user: any) => modifyUser(user));
+};
+
+const modifyStatus = (status: any): Status => {
+  const modifiedStatus: Status = {
+    label: status.name,
+    id: '',
+    value: '',
+    icon: '',
+  };
+  switch (modifiedStatus.label) {
+    case 'Pending':
+      modifiedStatus.icon = QuestionMarkCircledIcon;
+      modifiedStatus.value = modifiedStatus.label;
+      break;
+    case 'In Progress':
+      modifiedStatus.icon = StopwatchIcon;
+      modifiedStatus.value = modifiedStatus.label;
+      break;
+    case 'Done':
+      modifiedStatus.icon = CheckCircledIcon;
+      modifiedStatus.value = modifiedStatus.label;
+      break;
+    case 'Canceled':
+      modifiedStatus.icon = CrossCircledIcon;
+      modifiedStatus.value = modifiedStatus.label;
+      break;
+  }
+  return modifiedStatus;
+};
+
+const modifyPriority = (priority: any): Priority => {
+  const modifiedPriority: Priority = {
+    label: priority.name,
+    id: '',
+    value: '',
+    icon: '',
+  };
+  switch (modifiedPriority.label) {
+    case 'High':
+      modifiedPriority.icon = ArrowTopRightIcon;
+      modifiedPriority.value = modifiedPriority.label;
+      break;
+    case 'Medium':
+      modifiedPriority.icon = ArrowRightIcon;
+      modifiedPriority.value = modifiedPriority.label;
+      break;
+    case 'Low':
+      modifiedPriority.icon = ArrowDownIcon;
+      modifiedPriority.value = modifiedPriority.label;
+      break;
+    case 'Critical':
+      modifiedPriority.icon = ArrowUpIcon;
+      modifiedPriority.value = modifiedPriority.label;
+      break;
+  }
+  return modifiedPriority;
+};
+
+const modifyUser = (user: any): User => {
+  const modifiedUser: User = {
+    id: user.id,
+    userName: user.userName,
+    email: user.email,
+  };
+  return modifiedUser;
+};
+
+const modifyTodo = (todo: any): Todo => {
+  const modifiedTodo: Todo = {
+    id: todo.id,
+    title: todo.title,
+    description: todo.description,
+    createdOn: new Date(todo.createdOn),
+    due: new Date(todo.due),
+    myUser: modifyUser(todo.myUser),
+    priority: modifyPriority(todo.priority),
+    status: modifyStatus(todo.status),
+  };
+  return modifiedTodo;
 };

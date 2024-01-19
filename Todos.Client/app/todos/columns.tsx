@@ -2,7 +2,7 @@ import { format } from 'date-fns';
 import { Checkbox } from '@/components/ui/checkbox';
 import { ColumnDef } from '@tanstack/react-table';
 import { DataTableColumnHeader } from './data-table-column-header';
-import { Todo } from '@/types/types';
+import { Priority, Status, Todo } from '@/types/types';
 import { DataTableRowActions } from './data-table-row-actions';
 
 export const columns: ColumnDef<Todo>[] = [
@@ -46,19 +46,20 @@ export const columns: ColumnDef<Todo>[] = [
       return (
         <div className="flex items-center">
           {priority.icon && <priority.icon className="mr-2 h-4 w-4 text-muted-foreground" />}
-          <span>{priority.label}</span>
+          <span>{priority.value}</span>
         </div>
       );
     },
-    filterFn: (row, id, value) => {
-      return value.includes(row.getValue(id));
+    filterFn: (row, _id, value) => {
+      const priority = row.getValue('priority') as Priority;
+      return value.includes(priority.value);
     },
   },
   {
     accessorKey: 'status',
     header: ({ column }) => <DataTableColumnHeader column={column} title="Status" />,
     cell: ({ row }) => {
-      const status = row.original.status;
+      const status = row.getValue('status') as Status;
       if (!status) return null;
       return (
         <div className="flex w-[100px] items-center">
@@ -67,8 +68,9 @@ export const columns: ColumnDef<Todo>[] = [
         </div>
       );
     },
-    filterFn: (row, id, value) => {
-      return value.includes(row.getValue(id));
+    filterFn: (row, _id, value) => {
+      const status = row.getValue('status') as Status;
+      return value.includes(status.value);
     },
   },
   {
@@ -103,6 +105,10 @@ export const columns: ColumnDef<Todo>[] = [
       const username = row.original.myUser.userName;
       if (!username) return null;
       return <div className="flex items-center">{username}</div>;
+    },
+    filterFn: (row, id, value) => {
+      const username = row.original.myUser.userName;
+      return username.toLowerCase().includes(value);
     },
   },
   {

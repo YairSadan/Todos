@@ -1,13 +1,17 @@
 'use client';
+
 import { Cross2Icon } from '@radix-ui/react-icons';
 import { Table } from '@tanstack/react-table';
+
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
+
 import { DataTableFacetedFilter } from './data-table-faceted-filter';
 import { DataTableViewOptions } from './data-table-view-options';
 import AddTodoDialog from './add-todo-dialog';
-import { useContext } from 'react';
-import { PrioritiesContext, StatusesContext } from '@/data/data';
+import { useEffect, useState } from 'react';
+import { getPriorities, getStatuses, getUsers } from '@/lib/actions';
+import { Priority, Status, User } from '@/types/types';
 
 interface DataTableToolbarProps<TData> {
   table: Table<TData>;
@@ -15,8 +19,20 @@ interface DataTableToolbarProps<TData> {
 
 export function DataTableToolbar<TData>({ table }: DataTableToolbarProps<TData>) {
   const isFiltered = table.getState().columnFilters.length > 0;
-  const statuses = useContext(StatusesContext);
-  const priorities = useContext(PrioritiesContext);
+  const [statuses, setStatuses] = useState<Status[]>([]);
+  const [priorities, setPriorities] = useState<Priority[]>([]);
+  const [users, setUsers] = useState<User[]>([]);
+  useEffect(() => {
+    getStatuses().then((statuses) => {
+      setStatuses(statuses);
+    });
+    getPriorities().then((priorities) => {
+      setPriorities(priorities);
+    });
+    getUsers().then((users) => {
+      setUsers(users);
+    });
+  }, []);
   return (
     <div className="flex items-center justify-between">
       <div className="flex flex-1 items-center space-x-2">
@@ -38,6 +54,16 @@ export function DataTableToolbar<TData>({ table }: DataTableToolbarProps<TData>)
             column={table.getColumn('priority')}
             title="Priority"
             options={priorities}
+          />
+        )}
+        {table.getColumn('user') && (
+          <DataTableFacetedFilter
+            column={table.getColumn('user')}
+            title="User"
+            options={users.map((user) => ({
+              value: user.userName,
+              label: user.userName,
+            }))}
           />
         )}
         {isFiltered && (
