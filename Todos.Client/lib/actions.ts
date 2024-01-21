@@ -56,6 +56,17 @@ export const getUsers = async (): Promise<User[]> => {
   return data.map((user: any) => modifyUser(user));
 };
 
+export const deleteTodo = (id: string) => async () => {
+  await fetch(`http://localhost:5160/api/todos/${id}`, {
+    method: 'DELETE',
+    headers: {
+      'Content-Type': 'application/json',
+      Authorization: 'Bearer ' + sessionStorage.getItem('accessToken'),
+    },
+  });
+};
+
+
 const modifyStatus = (status: any): Status => {
   const modifiedStatus: Status = {
     label: status.name,
