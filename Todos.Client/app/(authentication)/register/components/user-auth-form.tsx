@@ -18,9 +18,6 @@ const registerSchema = z.object({
   password: z
     .string()
     .min(8)
-    .refine((data) => !data.match(/[A-Z]/), {
-      message: 'Password must contain at least one uppercase letter',
-    })
 });
 
 const registerFetch = async (email: string, password: string) => {
