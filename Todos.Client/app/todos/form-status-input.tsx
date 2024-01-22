@@ -9,13 +9,15 @@ import {
 import React, { useEffect, useState } from 'react';
 import { getStatuses } from '@/lib/actions';
 import { Status } from '@/data/schema';
+import { modifyStatus } from '@/lib/modifications';
+import { iconMappings } from '@/components/icons';
 
 export default function FormStatusInput({ form }: { form: any }) {
   // todo find the type of zod form
   const [statuses, setStatuses] = useState<Status[]>([]);
   useEffect(() => {
     getStatuses().then((statuses) => {
-      setStatuses(statuses);
+      setStatuses(statuses.map((status: any) => modifyStatus(status)));
     });
   }, []);
   return (
@@ -35,7 +37,7 @@ export default function FormStatusInput({ form }: { form: any }) {
               {statuses.map((status) => (
                 <SelectItem key={status.label} value={status.id}>
                   <div className="flex items-center space-x-2">
-                    <status.icon />
+                    {iconMappings[status.icon as keyof typeof iconMappings]}
                     <span>{status.label}</span>
                   </div>
                 </SelectItem>

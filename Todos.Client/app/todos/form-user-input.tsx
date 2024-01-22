@@ -19,18 +19,7 @@ import { Button } from '@/components/ui/button';
 import { CheckIcon, ChevronsUpDown } from 'lucide-react';
 import { cn } from '@/lib/utils';
 import { User } from '@/data/schema';
-
-const getUsers = async (): Promise<User[]> => {
-  const res = await fetch(`http://localhost:5160/api/MyUsers`, {
-    method: 'GET',
-    headers: {
-      'Content-Type': 'application/json',
-      authorization: 'Bearer ' + sessionStorage.getItem('accessToken'),
-    },
-  });
-  const data = await res.json();
-  return data;
-};
+import { getUsers } from '@/lib/actions';
 
 export default function FormUserInput({ form }: { form: any }) {
   //todo find the type of zod form

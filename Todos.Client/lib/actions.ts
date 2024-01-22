@@ -37,7 +37,7 @@ export const getUsers = async (): Promise<any> => {
     method: 'GET',
     headers: {
       'Content-Type': 'application/json',
-      Authorization: `Bearer ${cookies().get('accessToken')}`,
+      Authorization: `Bearer ${cookies().get('accessToken')?.value}`,
     },
   });
   return await res.json();
