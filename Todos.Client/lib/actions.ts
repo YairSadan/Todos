@@ -1,4 +1,5 @@
 'use server';
+import { revalidatePath } from 'next/cache';
 import { cookies } from 'next/headers';
 
 export const getTodos = async (): Promise<any> => {
@@ -9,6 +10,19 @@ export const getTodos = async (): Promise<any> => {
       Authorization: `Bearer ${cookies().get('accessToken')?.value}`,
     },
   });
+  return await res.json();
+};
+export const addTodo = async (todo: any): Promise<any> => {
+  // add a tododto type
+  const res = await fetch(`http://localhost:5160/api/todos`, {
+    method: 'POST',
+    headers: {
+      'Content-Type': 'application/json',
+      Authorization: `Bearer ${cookies().get('accessToken')?.value}`,
+    },
+    body: JSON.stringify(todo),
+  });
+  revalidatePath('/todos');
   return await res.json();
 };
 
@@ -44,15 +58,18 @@ export const getUsers = async (): Promise<any> => {
 };
 
 export const deleteTodo = (id: string) => async () => {
-  await fetch(`http://localhost:5160/api/todos/${id}`, {
+  const res = await fetch(`http://localhost:5160/api/todos/${id}`, {
     method: 'DELETE',
     headers: {
       'Content-Type': 'application/json',
       Authorization: `Bearer ${cookies().get('accessToken')}`,
     },
   });
+  revalidatePath('/todos');
+  return await res.json();
 };
-export const logout = () => () => {
+export const logout = () => async () => {
+  console.log('sdf')
   cookies().delete('accessToken');
   cookies().delete('refreshToken');
 };

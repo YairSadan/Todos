@@ -22,6 +22,7 @@ import { z } from 'zod';
 import FormUserInput from './form-user-input';
 import FormStatusInput from './form-status-input';
 import FormPriorityInput from './form-priority-input';
+import { addTodo } from '@/lib/actions';
 
 const formSchema = z.object({
   title: z.string().min(2).max(50),
@@ -46,14 +47,7 @@ export default function AddTodoForm() {
   });
 
   function onSubmit(values: z.infer<typeof formSchema>) {
-    fetch(`http://localhost:5160/api/todos`, { // todo: add to actions
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json',
-        authorization: 'Bearer ' + sessionStorage.getItem('accessToken'),
-      },
-      body: JSON.stringify(values),
-    })
+    addTodo(values);
   }
 
   return (

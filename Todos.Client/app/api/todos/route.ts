@@ -1,3 +1,4 @@
+import { revalidatePath } from 'next/cache';
 import { cookies } from 'next/headers';
 
 export async function GET(request: Request) {
@@ -21,6 +22,7 @@ export async function DELETE(request: Request) {
       Authorization: `Bearer ${cookies().get('accessToken')?.value}`,
     },
   });
+  revalidatePath('/todos');
   const data = await res.json();
   return Response.json({ data });
 }
