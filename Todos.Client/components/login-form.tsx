@@ -8,6 +8,7 @@ import { AtSymbolIcon, KeyIcon, ExclamationCircleIcon } from '@heroicons/react/2
 import { ArrowRightIcon } from '@heroicons/react/20/solid';
 import { useRouter } from 'next/navigation';
 import { Input } from './ui/input';
+import { login } from '@/lib/actions';
 
 const signInScema = z.object({
   email: z.string().email(),
@@ -25,31 +26,11 @@ const LoginForm: React.FC = () => {
     resolver: zodResolver(signInScema),
   });
   const router = useRouter();
-  const login = async (email: string, password: string) => {
-    const res = await fetch(`http://localhost:5160/login`, {
-      method: 'POST',
-      credentials: 'include',
-      headers: {
-        'Content-Type': 'application/json',
-      },
-      body: JSON.stringify({
-        email,
-        password,
-      }),
-    });
-    const data = await res.json();
-    if (res.status === 200) {
-      const { accessToken, refreshToken } = data;
-      sessionStorage.setItem('accessToken', accessToken);
-      sessionStorage.setItem('refreshToken', refreshToken);
-      router.push('/todos');
-    }
-    // TODO add a wrong credentials modal
-  };
-
 
   const onSubmit = (data: SignInSchemaType) => {
-    login(data.email, data.password);
+    login(data.email, data.password).then((res) => {
+      if (res) router.push('/todos');
+    });
   };
 
   return (
@@ -93,13 +74,13 @@ const LoginForm: React.FC = () => {
         <LoginButton />
         <div className="flex flex-col h-8 space-y-1 my-1" aria-live="polite" aria-atomic="true">
           {errors.email && (
-            <div className='flex space-x-1'>
+            <div className="flex space-x-1">
               <ExclamationCircleIcon className="h-5 w-5 text-warning" />
               <p className="text-sm text-warning">{errors.email?.message}</p>
             </div>
           )}
           {errors.password && (
-            <div className='flex space-x-1'>
+            <div className="flex space-x-1">
               <ExclamationCircleIcon className="h-5 w-5 text-warning" />
               <p className="text-sm text-warning">{errors.password?.message}</p>
             </div>

@@ -10,8 +10,8 @@ import { DataTableFacetedFilter } from './data-table-faceted-filter';
 import { DataTableViewOptions } from './data-table-view-options';
 import AddTodoDialog from './add-todo-dialog';
 import { useEffect, useState } from 'react';
-import { getPriorities, getStatuses, getUsers } from '@/lib/actions';
-import { Priority, Status, User } from '@/types/types';
+import { modifyStatus, modifyPriority, modifyUser } from '@/lib/modifications';
+import { Status, Priority, User } from '@/data/schema';
 
 interface DataTableToolbarProps<TData> {
   table: Table<TData>;
@@ -23,15 +23,24 @@ export function DataTableToolbar<TData>({ table }: DataTableToolbarProps<TData>)
   const [priorities, setPriorities] = useState<Priority[]>([]);
   const [users, setUsers] = useState<User[]>([]);
   useEffect(() => {
-    getStatuses().then((statuses) => {
-      setStatuses(statuses);
-    });
-    getPriorities().then((priorities) => {
-      setPriorities(priorities);
-    });
-    getUsers().then((users) => {
-      setUsers(users);
-    });
+    (async () => {
+      const res = await fetch('/api/statuses');
+      const { data } = await res.json();
+      const result: Status[] = data.map((status: any) => modifyStatus(status));
+      setStatuses(result);
+    })();
+    (async () => {
+      const res = await fetch('/api/priorities');
+      const { data } = await res.json();
+      const result: Priority[] = data.map((priority: any) => modifyPriority(priority));
+      setPriorities(result);
+    })();
+    (async () => {
+      const res = await fetch('/api/users');
+      const { data } = await res.json();
+      const result: User[] = data.map((user: any) => modifyUser(user));
+      setUsers(result);
+    })();
   }, []);
   return (
     <div className="flex items-center justify-between">

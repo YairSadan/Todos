@@ -10,18 +10,25 @@ import {
   DropdownMenuItem,
   DropdownMenuSeparator,
   DropdownMenuShortcut,
-  DropdownMenuSub,
-  DropdownMenuSubContent,
-  DropdownMenuSubTrigger,
+
   DropdownMenuTrigger,
 } from '@/components/ui/dropdown-menu';
-import { deleteTodo } from '@/lib/actions';
-import { Todo } from '@/types/types';
+import { TodoSchema } from '@/data/schema';
 
-interface DataTableRowActionsProps {
-  row: Row<Todo>;
+interface DataTableRowActions<TData> {
+  row: Row<TData>;
 }
-export function DataTableRowActions<Todo>({ row }: DataTableRowActionsProps) {
+export function DataTableRowActions<TData>({ row }: DataTableRowActions<TData>) {
+  const todo = TodoSchema.parse(row.original);
+  const deleteTodo = () => {
+    fetch('/api/todos/', {
+      body: JSON.stringify({ id: todo.id }),
+      method: 'DELETE',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+    });
+  };
   return (
     <DropdownMenu>
       <DropdownMenuTrigger asChild>
@@ -35,7 +42,7 @@ export function DataTableRowActions<Todo>({ row }: DataTableRowActionsProps) {
         <DropdownMenuItem>Make a copy</DropdownMenuItem>
         <DropdownMenuItem>Favorite</DropdownMenuItem>
         <DropdownMenuSeparator />
-        <DropdownMenuItem onClick={deleteTodo(row.original.id)}>
+        <DropdownMenuItem onClick={deleteTodo}>
           Delete
           <DropdownMenuShortcut>⌘⌫</DropdownMenuShortcut>
         </DropdownMenuItem>

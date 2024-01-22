@@ -1,10 +1,11 @@
+'use client';
 import { format } from 'date-fns';
 import { Checkbox } from '@/components/ui/checkbox';
 import { ColumnDef } from '@tanstack/react-table';
 import { DataTableColumnHeader } from './data-table-column-header';
-import { Priority, Status, Todo } from '@/types/types';
 import { DataTableRowActions } from './data-table-row-actions';
-
+import { Priority, Status, Todo } from '@/data/schema';
+import { iconMappings } from '@/components/icons';
 export const columns: ColumnDef<Todo>[] = [
   {
     id: 'select',
@@ -45,7 +46,7 @@ export const columns: ColumnDef<Todo>[] = [
       if (!priority) return null;
       return (
         <div className="flex items-center">
-          {priority.icon && <priority.icon className="mr-2 h-4 w-4 text-muted-foreground" />}
+          {iconMappings[priority.icon]}
           <span>{priority.value}</span>
         </div>
       );
@@ -63,7 +64,7 @@ export const columns: ColumnDef<Todo>[] = [
       if (!status) return null;
       return (
         <div className="flex w-[100px] items-center">
-          {status.icon && <status.icon className="mr-2 h-4 w-4 text-muted-foreground" />}
+          {iconMappings[status.icon]}
           <span>{status.label}</span>
         </div>
       );
@@ -83,7 +84,7 @@ export const columns: ColumnDef<Todo>[] = [
     },
     filterFn: (row, id, value) => {
       //needs a test
-      const createdOn = row.original.createdOn;
+      const createdOn = new Date(row.original.createdOn);
       const filterDate = value ? new Date(value) : null;
       if (!createdOn || !filterDate) return false;
       return createdOn.toDateString() === filterDate.toDateString();

@@ -7,13 +7,13 @@ import {
   SelectValue,
 } from '@/components/ui/select';
 import React, { useEffect, useState } from 'react';
-import { Priority } from '@/types/types';
 import {
   ArrowDownIcon,
   ArrowRightIcon,
   ArrowTopRightIcon,
   ArrowUpIcon,
 } from '@radix-ui/react-icons';
+import { Priority } from '@/data/schema';
 
 const getPriorities = async (): Promise<Priority[]> => {
   const res = await fetch(`http://localhost:5160/api/priorities`, {

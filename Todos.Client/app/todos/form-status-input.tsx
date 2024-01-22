@@ -7,8 +7,8 @@ import {
   SelectValue,
 } from '@/components/ui/select';
 import React, { useEffect, useState } from 'react';
-import { Status } from '@/types/types';
 import { getStatuses } from '@/lib/actions';
+import { Status } from '@/data/schema';
 
 export default function FormStatusInput({ form }: { form: any }) {
   // todo find the type of zod form

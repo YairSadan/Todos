@@ -18,7 +18,7 @@ import { Popover, PopoverContent, PopoverTrigger } from '@/components/ui/popover
 import { Button } from '@/components/ui/button';
 import { CheckIcon, ChevronsUpDown } from 'lucide-react';
 import { cn } from '@/lib/utils';
-import { User } from '@/types/types';
+import { User } from '@/data/schema';
 
 const getUsers = async (): Promise<User[]> => {
   const res = await fetch(`http://localhost:5160/api/MyUsers`, {
