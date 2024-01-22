@@ -24,7 +24,7 @@ interface DataTableFacetedFilterProps<TData, TValue> {
   options: {
     label: string;
     value: string;
-    icon?: React.ComponentType<{ className?: string }>;
+    icon?: any;
   }[];
 }
 
@@ -99,7 +99,7 @@ export function DataTableFacetedFilter<TData, TValue>({
                       )}>
                       <CheckIcon className={cn('h-4 w-4')} />
                     </div>
-                    {option.icon && iconMappings[option.icon]}
+                    {option.icon && iconMappings[option.icon as keyof typeof iconMappings]}
                     <span>{option.label}</span>
                     {facets?.get(option.value) && (
                       <span className="ml-auto flex h-4 w-4 items-center justify-center font-mono text-xs">

@@ -11,15 +11,3 @@ export async function GET(request: Request) {
   const data = await res.json();
   return Response.json({ data });
 }
-
-export async function DELETE(request: Request) {
-  const res = await fetch(`http://localhost:5160/api/MyUsers/${request.params.id}`, {
-    method: 'DELETE',
-    headers: {
-      'Content-Type': 'application/json',
-      Authorization: `Bearer ${cookies().get('accessToken')?.value}`,
-    },
-  });
-  const data = await res.json();
-  return Response.json({ data });
-}

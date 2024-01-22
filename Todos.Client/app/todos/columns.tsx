@@ -46,7 +46,7 @@ export const columns: ColumnDef<Todo>[] = [
       if (!priority) return null;
       return (
         <div className="flex items-center">
-          {iconMappings[priority.icon]}
+          {iconMappings[priority.icon as keyof typeof iconMappings]}
           <span>{priority.value}</span>
         </div>
       );
@@ -64,7 +64,7 @@ export const columns: ColumnDef<Todo>[] = [
       if (!status) return null;
       return (
         <div className="flex w-[100px] items-center">
-          {iconMappings[status.icon]}
+          {iconMappings[status.icon as keyof typeof iconMappings]}
           <span>{status.label}</span>
         </div>
       );
