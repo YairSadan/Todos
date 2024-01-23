@@ -8,7 +8,7 @@ import { useState } from 'react';
 import { useRouter } from 'next/navigation';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { useForm } from 'react-hook-form';
-import { ZodStringCheck, z } from 'zod';
+import { z } from 'zod';
 import { ExclamationCircleIcon } from '@heroicons/react/24/outline';
 
 interface UserAuthFormProps extends React.HTMLAttributes<HTMLDivElement> {}
@@ -30,16 +30,20 @@ const registerFetch = async (email: string, password: string) => {
     }),
   });
   if (res.status === 200) return true;
-  else if (res.status === 400) {
-    throw new Error('Check your email and password and try again');
+  const response = JSON.parse(await res.text());
+  if (response.status === 400) {
+    if (response.errors && response.errors.DuplicateUserName) {
+      throw new Error('this email is already taken');
+    }
+    throw new Error('Something went wrong');
   }
-  throw new Error('Something went wrong');
 };
 
 type RegisterSchemaType = z.infer<typeof registerSchema>;
 
 export function UserAuthForm({ className, ...props }: UserAuthFormProps) {
   const [isLoading, setIsLoading] = useState<boolean>(false);
+  const [error, setError] = useState<string>('');
   const router = useRouter();
 
   const {
@@ -55,7 +59,8 @@ export function UserAuthForm({ className, ...props }: UserAuthFormProps) {
     try {
       await registerFetch(data.email, data.password);
       router.push('/login');
-    } catch (error) {
+    } catch (error: any) {
+      setError(error.message);
       console.error(error); //TODO open modal error
       setIsLoading(false);
     }
@@ -71,6 +76,7 @@ export function UserAuthForm({ className, ...props }: UserAuthFormProps) {
             </Label>
             <Input
               {...register('email')}
+              onChange={() => setError('')}
               id="email"
               placeholder="name@example.com"
               type="email"
@@ -124,6 +130,12 @@ export function UserAuthForm({ className, ...props }: UserAuthFormProps) {
               <div className="flex space-x-1">
                 <ExclamationCircleIcon className="h-5 w-5 text-warning" />
                 <p className="text-sm text-warning">{errors.password?.message}</p>
+              </div>
+            )}
+            {error && (
+              <div className="flex space-x-1">
+                <ExclamationCircleIcon className="h-5 w-5 text-warning" />
+                <p className="text-sm text-warning">{error}</p>
               </div>
             )}
           </div>

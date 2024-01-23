@@ -8,6 +8,7 @@ import {
   CrossCircledIcon,
   CheckCircledIcon,
 } from '@radix-ui/react-icons';
+import { ListTodoIcon } from 'lucide-react';
 
 export const iconMappings = {
   ArrowTopRightIcon: <ArrowTopRightIcon className="mr-2 h-4 w-4 text-muted-foreground" />,
@@ -20,4 +21,5 @@ export const iconMappings = {
   StopwatchIcon: <StopwatchIcon className="mr-2 h-4 w-4 text-muted-foreground" />,
   CrossCircledIcon: <CrossCircledIcon className="mr-2 h-4 w-4 text-muted-foreground" />,
   CheckCircledIcon: <CheckCircledIcon className="mr-2 h-4 w-4 text-muted-foreground" />,
+  logo: <ListTodoIcon className='h-16 w-16'/>,
 };

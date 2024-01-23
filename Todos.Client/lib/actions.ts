@@ -84,6 +84,7 @@ export const login = async (email: string, password: string) => {
     }),
   });
   const data = await res.json();
+  console.log(data)
   if (res.status === 200) {
     cookies().set('accessToken', data.accessToken, {
       httpOnly: true,

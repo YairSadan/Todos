@@ -12,12 +12,13 @@ import { login } from '@/lib/actions';
 
 const signInScema = z.object({
   email: z.string().email(),
-  password: z.string().min(6),
+  password: z.string().min(8),
 });
 
 type SignInSchemaType = z.infer<typeof signInScema>;
 
 const LoginForm: React.FC = () => {
+  const [wrongCredentials, setWrongCredentials] = React.useState<boolean>(false)
   const {
     register,
     handleSubmit,
@@ -30,6 +31,7 @@ const LoginForm: React.FC = () => {
   const onSubmit = (data: SignInSchemaType) => {
     login(data.email, data.password).then((res) => {
       if (res) router.push('/todos');
+      else setWrongCredentials(true);
     });
   };
 
@@ -61,6 +63,7 @@ const LoginForm: React.FC = () => {
             <div className="relative">
               <Input
                 {...register('password')}
+                onChange={() => setWrongCredentials(false)}
                 className="peer block w-full rounded-md border py-[9px] pl-10 text-sm outline-2"
                 id="password"
                 type="password"
@@ -83,6 +86,12 @@ const LoginForm: React.FC = () => {
             <div className="flex space-x-1">
               <ExclamationCircleIcon className="h-5 w-5 text-warning" />
               <p className="text-sm text-warning">{errors.password?.message}</p>
+            </div>
+          )}
+          {wrongCredentials && (
+            <div className="flex space-x-1">
+              <ExclamationCircleIcon className="h-5 w-5 text-warning" />
+              <p className="text-sm text-warning">Wrong credentials</p>
             </div>
           )}
         </div>
