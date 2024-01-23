@@ -14,20 +14,23 @@ import {
   DropdownMenuTrigger,
 } from '@/components/ui/dropdown-menu';
 import { TodoSchema } from '@/data/schema';
+import { useRouter } from 'next/navigation';
 
 interface DataTableRowActions<TData> {
   row: Row<TData>;
 }
 export function DataTableRowActions<TData>({ row }: DataTableRowActions<TData>) {
   const todo = TodoSchema.parse(row.original);
-  const deleteTodo = () => {
-    fetch('/api/todos/', {
+  const router = useRouter();
+  const deleteTodo = async () => {
+    await fetch('/api/todos/', {
       body: JSON.stringify({ id: todo.id }),
       method: 'DELETE',
       headers: {
         'Content-Type': 'application/json',
       },
     });
+    router.refresh();
   };
   return (
     <DropdownMenu>

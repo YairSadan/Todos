@@ -1,4 +1,3 @@
-import { revalidatePath } from 'next/cache';
 import { cookies } from 'next/headers';
 import { NextRequest } from 'next/server';
 
@@ -20,14 +19,11 @@ export async function GET(request: NextRequest) {
 
 export async function DELETE(request: Request) {
   const { id } = await request.json();
-  const res = await fetch(`http://localhost:5160/api/todos/${id}`, {
+  await fetch(`http://localhost:5160/api/todos/${id}`, {
     method: 'DELETE',
     headers: {
       'Content-Type': 'application/json',
       Authorization: `Bearer ${cookies().get('accessToken')?.value}`,
     },
   });
-  revalidatePath('/todos');
-  const data = await res.json();
-  return Response.json({ data });
 }
