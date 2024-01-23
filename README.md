@@ -57,10 +57,10 @@ Replace `YOUR_SERVER`, `YOUR_PORT`, `YOUR_DATABASE`, `YOUR_USERNAME`, and `YOUR_
     dotnet run
 3. Open separate terminal at todos.client folder
 4. Launch the frontend
-    # For production
+    #### For production
     - npm run build
     - npm start 
-    # For development
+    #### For development
     - npm run dev
 
 - Ensure that the port is 3000
