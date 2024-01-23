@@ -26,16 +26,16 @@ This Todos application is a user-friendly, web-based task management tool design
    git clone https://github.com/YairSadan/Todos.git
 
 2. Navigate to the project repository:
-    cd Todos
+    - cd Todos
 
 3. Install dependencies for the backend:
-    cd Todos.API
-    dotnet restore
+    - cd Todos.API
+    - dotnet restore
 
 4. Install dependencies for the frontend:
-    cd ../
-    cd todos.client
-    npm install
+    - cd ../
+    - cd todos.client
+    - npm install
 
 ### Configuring the Database
 
@@ -57,8 +57,13 @@ Replace `YOUR_SERVER`, `YOUR_PORT`, `YOUR_DATABASE`, `YOUR_USERNAME`, and `YOUR_
     dotnet run
 3. Open separate terminal at todos.client folder
 4. Launch the frontend
-    npm start (for pruduction build) / npm run dev (for development) 
-            - Ensure that the port is 3000
+    # For production
+    - npm run build
+    - npm start 
+    # For development
+    - npm run dev
+
+- Ensure that the port is 3000
     
 ### Contributing
 Contributions to the Todos application are welcome. Please follow the steps below to contribute:
