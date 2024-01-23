@@ -15,9 +15,7 @@ interface UserAuthFormProps extends React.HTMLAttributes<HTMLDivElement> {}
 
 const registerSchema = z.object({
   email: z.string().email(),
-  password: z
-    .string()
-    .min(8)
+  password: z.string().min(8),
 });
 
 const registerFetch = async (email: string, password: string) => {
@@ -31,10 +29,8 @@ const registerFetch = async (email: string, password: string) => {
       password,
     }),
   });
-  const result = await res.json();
-  if (result.status === 200) return true;
-  else if (result.status === 400) {
-    if (result.errors.DuplicateUserName) throw new Error('User with this email already exists');
+  if (res.status === 200) return true;
+  else if (res.status === 400) {
     throw new Error('Check your email and password and try again');
   }
   throw new Error('Something went wrong');
@@ -54,13 +50,13 @@ export function UserAuthForm({ className, ...props }: UserAuthFormProps) {
     resolver: zodResolver(registerSchema),
   });
 
-  const onSubmit = (data: RegisterSchemaType) => {
+  const onSubmit = async (data: RegisterSchemaType) => {
     setIsLoading(true);
     try {
-      registerFetch(data.email, data.password);
+      await registerFetch(data.email, data.password);
       router.push('/login');
     } catch (error) {
-      console.error(error);
+      console.error(error); //TODO open modal error
       setIsLoading(false);
     }
   };

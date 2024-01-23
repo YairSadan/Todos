@@ -115,6 +115,7 @@ export const columns: ColumnDef<Todo>[] = [
       const username = row.original.myUser.userName;
       return username.toLowerCase().includes(value);
     },
+    enableSorting: false,
   },
   {
     id: 'actions',
