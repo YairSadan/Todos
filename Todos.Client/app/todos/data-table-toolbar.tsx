@@ -10,8 +10,9 @@ import { DataTableFacetedFilter } from './data-table-faceted-filter';
 import { DataTableViewOptions } from './data-table-view-options';
 import AddTodoDialog from './add-todo-dialog';
 import { useEffect, useState } from 'react';
-import { modifyStatus, modifyPriority, modifyUser } from '@/lib/modifications';
-import { Status, Priority, User } from '@/data/schema';
+import { modifyStatus, modifyPriority, modifyUser, modifyTodo } from '@/lib/modifications';
+import { Status, Priority, User, Todo } from '@/data/schema';
+import { DataTableDueFilter } from './data-table-due-filter';
 
 interface DataTableToolbarProps<TData> {
   table: Table<TData>;
@@ -22,6 +23,7 @@ export function DataTableToolbar<TData>({ table }: DataTableToolbarProps<TData>)
   const [statuses, setStatuses] = useState<Status[]>([]);
   const [priorities, setPriorities] = useState<Priority[]>([]);
   const [users, setUsers] = useState<User[]>([]);
+  const [thisWeekTodos, setThisWeekTodos] = useState<Todo[]>([]);
   useEffect(() => {
     (async () => {
       const res = await fetch('/api/statuses');
@@ -40,6 +42,12 @@ export function DataTableToolbar<TData>({ table }: DataTableToolbarProps<TData>)
       const { data } = await res.json();
       const result: User[] = data.map((user: any) => modifyUser(user));
       setUsers(result);
+    })();
+    (async () => {
+      const res = await fetch('/api/todos?filterOn=ThisWeek');
+      const { data } = await res.json();
+      const result: Todo[] = data.map((todo: any) => modifyTodo(todo));
+      setThisWeekTodos(result);
     })();
   }, []);
   return (
@@ -72,6 +80,16 @@ export function DataTableToolbar<TData>({ table }: DataTableToolbarProps<TData>)
             options={users.map((user) => ({
               value: user.userName,
               label: user.userName,
+            }))}
+          />
+        )}
+        {table.getColumn('due') && (
+          <DataTableDueFilter
+            column={table.getColumn('due')}
+            title="Due this week"
+            options={thisWeekTodos.map((todo) => ({
+              value: todo.due,
+              label: 'this week'
             }))}
           />
         )}

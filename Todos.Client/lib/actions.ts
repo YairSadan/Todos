@@ -2,8 +2,8 @@
 import { revalidatePath } from 'next/cache';
 import { cookies } from 'next/headers';
 
-export const getTodos = async (): Promise<any> => {
-  const res = await fetch(`http://localhost:5160/api/todos`, {
+export const getTodos = async (filterOn: string = ''): Promise<any> => {
+  const res = await fetch(`http://localhost:5160/api/todos?filterOn=${filterOn}`, {
     method: 'GET',
     headers: {
       'Content-Type': 'application/json',
@@ -69,7 +69,6 @@ export const deleteTodo = (id: string) => async () => {
   return await res.json();
 };
 export const logout = () => async () => {
-  console.log('sdf')
   cookies().delete('accessToken');
   cookies().delete('refreshToken');
 };

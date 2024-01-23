@@ -82,7 +82,7 @@ export const columns: ColumnDef<Todo>[] = [
       const createdDate = createdOn ? format(createdOn, 'MM/dd/yyyy') : null;
       return <div className="flex items-center">{createdDate}</div>;
     },
-    filterFn: (row, id, value) => {
+    filterFn: (row, _id, value) => {
       //needs a test
       const createdOn = new Date(row.original.createdOn);
       const filterDate = value ? new Date(value) : null;
@@ -98,6 +98,10 @@ export const columns: ColumnDef<Todo>[] = [
       const dueDate = due ? format(due, 'MM/dd/yyyy') : null;
       return <div className="flex items-center">{dueDate}</div>;
     },
+    filterFn: (row, _id, value) => {
+      const due = row.getValue('due');
+      return value.includes(due);
+    },
   },
   {
     accessorKey: 'user',
@@ -107,7 +111,7 @@ export const columns: ColumnDef<Todo>[] = [
       if (!username) return null;
       return <div className="flex items-center">{username}</div>;
     },
-    filterFn: (row, id, value) => {
+    filterFn: (row, _id, value) => {
       const username = row.original.myUser.userName;
       return username.toLowerCase().includes(value);
     },

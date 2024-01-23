@@ -28,16 +28,26 @@ public class SQLTodoRepository(TodosDbContext dbContext) : ITodoRepository
     public async Task<List<Todo>> GetAllAsync(string? filterOn = null, string? filterQuery = null, string? sortBy = null, bool isAscending = true, int pageNumber = 1, int pageSize = 1000)
     {
         var todos = dbContext.Todos.Include("Priority").Include("Status").Include("MyUser").AsQueryable();
-        // Filtering 
-        if (string.IsNullOrWhiteSpace(filterOn) == false && string.IsNullOrWhiteSpace(filterQuery) == false)
+        if (string.IsNullOrWhiteSpace(filterOn) == false)
         {
-            if (filterOn.Equals("Status", StringComparison.OrdinalIgnoreCase))
-                todos = todos.Where(todo => EF.Functions.ILike(todo.Status.Name, filterQuery));
-            else if (filterOn.Equals("Priority", StringComparison.OrdinalIgnoreCase))
-                todos = todos.Where(todo => EF.Functions.ILike(todo.Priority.Name, filterQuery));
-            else if (filterOn.Equals("User", StringComparison.OrdinalIgnoreCase))
-                todos = todos.Where(todo => EF.Functions.ILike(todo.MyUser.UserName, filterQuery));
+            // Filtering 
+            if (filterOn.Equals("ThisWeek", StringComparison.OrdinalIgnoreCase))
+            {
+                var today = DateTime.UtcNow;
+                var startOfWeek = today.AddDays(-1 * (int)today.DayOfWeek);
+                var endOfWeek = startOfWeek.AddDays(7);
+                todos = todos.Where(todo => todo.Due >= startOfWeek && todo.Due <= endOfWeek);
+            }
+            if (string.IsNullOrWhiteSpace(filterQuery) == false)
+            {
+                if (filterOn.Equals("Status", StringComparison.OrdinalIgnoreCase))
+                    todos = todos.Where(todo => EF.Functions.ILike(todo.Status.Name, filterQuery));
+                else if (filterOn.Equals("Priority", StringComparison.OrdinalIgnoreCase))
+                    todos = todos.Where(todo => EF.Functions.ILike(todo.Priority.Name, filterQuery));
+                else if (filterOn.Equals("User", StringComparison.OrdinalIgnoreCase))
+                    todos = todos.Where(todo => EF.Functions.ILike(todo.MyUser.UserName, filterQuery));
 
+            }
         }
 
         // Sorting
