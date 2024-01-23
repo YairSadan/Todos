@@ -46,6 +46,9 @@ This Todos application is a user-friendly, web-based task management tool design
     "DefaultConnection": "Server=YOUR_SERVER;Port=YOUR_PORT;Database=YOUR_DATABASE;Username=YOUR_USERNAME;Password=YOUR_PASSWORD;"
 }
 Replace `YOUR_SERVER`, `YOUR_PORT`, `YOUR_DATABASE`, `YOUR_USERNAME`, and `YOUR_PASSWORD` with your PostgreSQL server details.
+4. Create the DataBase
+    1. Open terminal at Todos.API
+    2. dotnet ef database update
 
 ### Running the Application
 
