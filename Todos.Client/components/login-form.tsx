@@ -18,7 +18,7 @@ const signInScema = z.object({
 type SignInSchemaType = z.infer<typeof signInScema>;
 
 const LoginForm: React.FC = () => {
-  const [wrongCredentials, setWrongCredentials] = React.useState<boolean>(false)
+  const [wrongCredentials, setWrongCredentials] = React.useState<boolean>(false);
   const {
     register,
     handleSubmit,
@@ -28,11 +28,11 @@ const LoginForm: React.FC = () => {
   });
   const router = useRouter();
 
-  const onSubmit = (data: SignInSchemaType) => {
-    login(data.email, data.password).then((res) => {
-      if (res) router.push('/todos');
-      else setWrongCredentials(true);
-    });
+  const onSubmit = async (data: SignInSchemaType) => {
+    setWrongCredentials(false);
+    const res = await login(data.email, data.password);
+    if (res) router.push('/todos');
+    else setWrongCredentials(true);
   };
 
   return (
@@ -63,7 +63,6 @@ const LoginForm: React.FC = () => {
             <div className="relative">
               <Input
                 {...register('password')}
-                onChange={() => setWrongCredentials(false)}
                 className="peer block w-full rounded-md border py-[9px] pl-10 text-sm outline-2"
                 id="password"
                 type="password"
@@ -74,7 +73,9 @@ const LoginForm: React.FC = () => {
             </div>
           </div>
         </div>
-        <LoginButton />
+        <Button type="submit" className="mt-4 w-full">
+          Log in <ArrowRightIcon className="ml-auto h-5 w-5" />
+        </Button>
         <div className="flex flex-col h-8 space-y-1 my-1" aria-live="polite" aria-atomic="true">
           {errors.email && (
             <div className="flex space-x-1">
@@ -99,13 +100,5 @@ const LoginForm: React.FC = () => {
     </form>
   );
 };
-
-function LoginButton() {
-  return (
-    <Button className="mt-4 w-full">
-      Log in <ArrowRightIcon className="ml-auto h-5 w-5" />
-    </Button>
-  );
-}
 
 export default LoginForm;
