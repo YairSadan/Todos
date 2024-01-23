@@ -19,7 +19,15 @@ builder.Services.AddAuthorizationBuilder();
 builder.Services.AddDbContext<TodosDbContext>(options => options.UseNpgsql(builder.Configuration.GetConnectionString("TodosConnectionString")));
 
 builder.Services.AddIdentityCore<MyUser>().AddEntityFrameworkStores<TodosDbContext>().AddApiEndpoints();
-
+builder.Services.Configure<IdentityOptions>(options =>
+{
+    options.Password.RequireDigit = false;
+    options.Password.RequireLowercase = false;
+    options.Password.RequireNonAlphanumeric = false;
+    options.Password.RequireUppercase = false;
+    options.Password.RequiredLength = 8;
+    options.Password.RequiredUniqueChars = 0;
+});
 builder.Services.AddScoped<ITodoRepository, SQLTodoRepository>();
 builder.Services.AddScoped<IMyUserRepository, SQLMyUserRepository>();
 builder.Services.AddScoped<IPriorityRepository, SQLPriorityRepository>();
