@@ -10,17 +10,18 @@ import {
   DropdownMenuItem,
   DropdownMenuSeparator,
   DropdownMenuShortcut,
-
   DropdownMenuTrigger,
 } from '@/components/ui/dropdown-menu';
 import { TodoSchema } from '@/data/schema';
 import { useRouter } from 'next/navigation';
+import { useToast } from '@/components/ui/use-toast';
 
 interface DataTableRowActions<TData> {
   row: Row<TData>;
 }
 export function DataTableRowActions<TData>({ row }: DataTableRowActions<TData>) {
   const todo = TodoSchema.parse(row.original);
+  const { toast } = useToast();
   const router = useRouter();
   const deleteTodo = async () => {
     await fetch('/api/todos/', {
@@ -31,6 +32,11 @@ export function DataTableRowActions<TData>({ row }: DataTableRowActions<TData>) 
       },
     });
     router.refresh();
+    toast({
+      title: 'Todo deleted',
+      description: `"${todo.title}" was deleted.`,
+      variant: "destructive"
+    });
   };
   return (
     <DropdownMenu>

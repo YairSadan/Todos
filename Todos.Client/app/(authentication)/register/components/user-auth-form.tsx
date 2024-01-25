@@ -10,6 +10,7 @@ import { zodResolver } from '@hookform/resolvers/zod';
 import { useForm } from 'react-hook-form';
 import { z } from 'zod';
 import { ExclamationCircleIcon } from '@heroicons/react/24/outline';
+import { useToast } from '@/components/ui/use-toast';
 
 interface UserAuthFormProps extends React.HTMLAttributes<HTMLDivElement> {}
 
@@ -45,6 +46,7 @@ export function UserAuthForm({ className, ...props }: UserAuthFormProps) {
   const [isLoading, setIsLoading] = useState<boolean>(false);
   const [error, setError] = useState<string>('');
   const router = useRouter();
+  const {toast} = useToast();
 
   const {
     register,
@@ -58,10 +60,18 @@ export function UserAuthForm({ className, ...props }: UserAuthFormProps) {
     setIsLoading(true);
     try {
       await registerFetch(data.email, data.password);
+      toast({
+        title: 'Account created',
+        description: 'We have created your account for you, please login.',
+      });
       router.push('/login');
     } catch (error: any) {
       setError(error.message);
-      console.error(error); //TODO open modal error
+      toast({
+        title: 'Error',
+        description: error.message,
+        variant: "destructive",
+      });
       setIsLoading(false);
     }
   };

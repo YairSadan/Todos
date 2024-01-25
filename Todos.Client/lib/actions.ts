@@ -73,31 +73,38 @@ export const logout = () => async () => {
   cookies().delete('refreshToken');
 };
 export const login = async (email: string, password: string) => {
-  const res = await fetch(`http://localhost:5160/login`, {
-    method: 'POST',
-    headers: {
-      'Content-Type': 'application/json',
-    },
-    body: JSON.stringify({
-      email,
-      password,
-    }),
-  });
-  const data = await res.json();
-  if (res.status === 200) {
-    cookies().set('accessToken', data.accessToken, {
-      httpOnly: true,
-      secure: process.env.NODE_ENV === 'production',
-      maxAge: 60 * 60 * 24 * 7,
-      path: '/',
+  try {
+    const res = await fetch(`http://localhost:5160/login`, {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify({
+        email,
+        password,
+      }),
     });
-    cookies().set('refreshToken', data.refreshToken, {
-      httpOnly: true,
-      secure: process.env.NODE_ENV === 'production',
-      maxAge: 60 * 60 * 24 * 7,
-      path: '/',
-    });
-    return true;
+    const data = await res.json();
+    if (res.status === 200) {
+      cookies().set('accessToken', data.accessToken, {
+        httpOnly: true,
+        secure: process.env.NODE_ENV === 'production',
+        maxAge: 60 * 60 * 24 * 7,
+        path: '/',
+      });
+      cookies().set('refreshToken', data.refreshToken, {
+        httpOnly: true,
+        secure: process.env.NODE_ENV === 'production',
+        maxAge: 60 * 60 * 24 * 7,
+        path: '/',
+      });
+      return true;
+    } else {
+      cookies().delete('accessToken');
+      cookies().delete('refreshToken');
+      return false;
+    }
+  } catch (error: any) {
+    throw new Error(error);
   }
-  return false;
 };

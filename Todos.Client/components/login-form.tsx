@@ -9,6 +9,7 @@ import { ArrowRightIcon } from '@heroicons/react/20/solid';
 import { useRouter } from 'next/navigation';
 import { Input } from './ui/input';
 import { login } from '@/lib/actions';
+import { useToast } from './ui/use-toast';
 
 const signInScema = z.object({
   email: z.string().email(),
@@ -18,7 +19,6 @@ const signInScema = z.object({
 type SignInSchemaType = z.infer<typeof signInScema>;
 
 const LoginForm: React.FC = () => {
-  const [wrongCredentials, setWrongCredentials] = React.useState<boolean>(false);
   const {
     register,
     handleSubmit,
@@ -27,12 +27,30 @@ const LoginForm: React.FC = () => {
     resolver: zodResolver(signInScema),
   });
   const router = useRouter();
-
+  const { toast } = useToast();
   const onSubmit = async (data: SignInSchemaType) => {
-    setWrongCredentials(false);
-    const res = await login(data.email, data.password);
-    if (res) router.push('/todos');
-    else setWrongCredentials(true);
+    try {
+      const res = await login(data.email, data.password);
+      if (res) {
+        toast({
+          title: 'Logged in',
+          description: `You are now logged in.`,
+        });
+        router.push('/todos');
+      } else {
+        toast({
+          title: 'Error',
+          description: `Something went wrong.`,
+          variant: 'destructive',
+        });
+      }
+    } catch (error: any) {
+      toast({
+        title: 'Error',
+        description: `${error.message}`,
+        variant: 'destructive',
+      });
+    }
   };
 
   return (
@@ -87,12 +105,6 @@ const LoginForm: React.FC = () => {
             <div className="flex space-x-1">
               <ExclamationCircleIcon className="h-5 w-5 text-warning" />
               <p className="text-sm text-warning">{errors.password?.message}</p>
-            </div>
-          )}
-          {wrongCredentials && (
-            <div className="flex space-x-1">
-              <ExclamationCircleIcon className="h-5 w-5 text-warning" />
-              <p className="text-sm text-warning">Wrong credentials</p>
             </div>
           )}
         </div>

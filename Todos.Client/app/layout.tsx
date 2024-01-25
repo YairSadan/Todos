@@ -4,6 +4,7 @@ import './globals.css';
 import { cn } from '../lib/utils';
 import { ThemeProvider } from '@/components/theme-provider';
 import { ModeToggle } from '@/components/mode-toggle';
+import { Toaster } from '@/components/ui/toaster';
 
 const fontSans = FontSans({
   subsets: ['latin'],
@@ -26,6 +27,7 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
           disableTransitionOnChange>
           <ModeToggle />
           {children}
+          <Toaster />
         </ThemeProvider>
       </body>
     </html>
