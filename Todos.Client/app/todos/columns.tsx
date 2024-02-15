@@ -6,7 +6,6 @@ import { DataTableColumnHeader } from "./data-table-column-header";
 import { DataTableRowActions } from "./data-table-row-actions";
 import { Priority, Status, Todo } from "@/data/schema";
 import { Icons } from "@/components/icons";
-import { HTMLAttributes } from "react";
 export const columns: ColumnDef<Todo>[] = [
   {
     id: "select",
@@ -48,9 +47,10 @@ export const columns: ColumnDef<Todo>[] = [
     cell: ({ row }) => {
       const priority = row.original.priority;
       if (!priority) return null;
+      const IconComponent = Icons[priority.icon as keyof typeof Icons];
       return (
         <div className="flex items-center">
-          {priority.icon && Icons[priority.icon as keyof typeof Icons]}
+          {IconComponent && <IconComponent />}
           <span>{priority.value}</span>
         </div>
       );
@@ -68,9 +68,10 @@ export const columns: ColumnDef<Todo>[] = [
     cell: ({ row }) => {
       const status = row.getValue("status") as Status;
       if (!status) return null;
+      const IconComponent = Icons[status.icon as keyof typeof Icons];
       return (
         <div className="flex w-[100px] items-center">
-          {status.icon && Icons[status.icon as keyof typeof Icons]}
+          {IconComponent && <IconComponent />}
           <span>{status.label}</span>
         </div>
       );
