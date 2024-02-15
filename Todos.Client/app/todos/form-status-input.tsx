@@ -1,16 +1,22 @@
-import { FormControl, FormField, FormItem, FormLabel, FormMessage } from '@/components/ui/form';
+import {
+  FormControl,
+  FormField,
+  FormItem,
+  FormLabel,
+  FormMessage,
+} from "@/components/ui/form";
 import {
   Select,
   SelectContent,
   SelectItem,
   SelectTrigger,
   SelectValue,
-} from '@/components/ui/select';
-import React, { useEffect, useState } from 'react';
-import { getStatuses } from '@/lib/actions';
-import { Status } from '@/data/schema';
-import { modifyStatus } from '@/lib/modifications';
-import { iconMappings } from '@/components/icons';
+} from "@/components/ui/select";
+import React, { useEffect, useState } from "react";
+import { getStatuses } from "@/lib/actions";
+import { Status } from "@/data/schema";
+import { modifyStatus } from "@/lib/modifications";
+import { Icons } from "@/components/icons";
 
 export default function FormStatusInput({ form }: { form: any }) {
   // todo find the type of zod form
@@ -37,7 +43,7 @@ export default function FormStatusInput({ form }: { form: any }) {
               {statuses.map((status) => (
                 <SelectItem key={status.label} value={status.id}>
                   <div className="flex items-center space-x-2">
-                    {iconMappings[status.icon as keyof typeof iconMappings]}
+                    {status.icon && Icons[status.icon as keyof typeof Icons]}
                     <span>{status.label}</span>
                   </div>
                 </SelectItem>

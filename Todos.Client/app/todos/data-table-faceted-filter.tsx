@@ -16,7 +16,7 @@ import {
 } from '@/components/ui/command';
 import { Popover, PopoverContent, PopoverTrigger } from '@/components/ui/popover';
 import { Separator } from '@/components/ui/separator';
-import { iconMappings } from '@/components/icons';
+import { Icons } from '@/components/icons';
 
 interface DataTableFacetedFilterProps<TData, TValue> {
   column?: Column<TData, TValue>;
@@ -99,7 +99,7 @@ export function DataTableFacetedFilter<TData, TValue>({
                       )}>
                       <CheckIcon className={cn('h-4 w-4')} />
                     </div>
-                    {option.icon && iconMappings[option.icon as keyof typeof iconMappings]}
+                    {option.icon && Icons[option.icon as keyof typeof Icons]}
                     <span>{option.label}</span>
                     {facets?.get(option.value) && (
                       <span className="ml-auto flex h-4 w-4 items-center justify-center font-mono text-xs">

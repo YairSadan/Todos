@@ -1,18 +1,20 @@
-'use client';
-import { format } from 'date-fns';
-import { Checkbox } from '@/components/ui/checkbox';
-import { ColumnDef } from '@tanstack/react-table';
-import { DataTableColumnHeader } from './data-table-column-header';
-import { DataTableRowActions } from './data-table-row-actions';
-import { Priority, Status, Todo } from '@/data/schema';
-import { iconMappings } from '@/components/icons';
+"use client";
+import { format } from "date-fns";
+import { Checkbox } from "@/components/ui/checkbox";
+import { ColumnDef } from "@tanstack/react-table";
+import { DataTableColumnHeader } from "./data-table-column-header";
+import { DataTableRowActions } from "./data-table-row-actions";
+import { Priority, Status, Todo } from "@/data/schema";
+import { Icons } from "@/components/icons";
+import { HTMLAttributes } from "react";
 export const columns: ColumnDef<Todo>[] = [
   {
-    id: 'select',
+    id: "select",
     header: ({ table }) => (
       <Checkbox
         checked={
-          table.getIsAllPageRowsSelected() || (table.getIsSomePageRowsSelected() && 'indeterminate')
+          table.getIsAllPageRowsSelected() ||
+          (table.getIsSomePageRowsSelected() && "indeterminate")
         }
         onCheckedChange={(value) => table.toggleAllPageRowsSelected(!!value)}
         aria-label="Select all rows"
@@ -31,55 +33,61 @@ export const columns: ColumnDef<Todo>[] = [
     enableHiding: false,
   },
   {
-    accessorKey: 'title',
-    header: 'Title',
+    accessorKey: "title",
+    header: "Title",
   },
   {
-    accessorKey: 'description',
-    header: 'Description',
+    accessorKey: "description",
+    header: "Description",
   },
   {
-    accessorKey: 'priority',
-    header: ({ column }) => <DataTableColumnHeader column={column} title="Priority" />,
+    accessorKey: "priority",
+    header: ({ column }) => (
+      <DataTableColumnHeader column={column} title="Priority" />
+    ),
     cell: ({ row }) => {
       const priority = row.original.priority;
       if (!priority) return null;
       return (
         <div className="flex items-center">
-          {iconMappings[priority.icon as keyof typeof iconMappings]}
+          {priority.icon && Icons[priority.icon as keyof typeof Icons]}
           <span>{priority.value}</span>
         </div>
       );
     },
     filterFn: (row, _id, value) => {
-      const priority = row.getValue('priority') as Priority;
+      const priority = row.getValue("priority") as Priority;
       return value.includes(priority.value);
     },
   },
   {
-    accessorKey: 'status',
-    header: ({ column }) => <DataTableColumnHeader column={column} title="Status" />,
+    accessorKey: "status",
+    header: ({ column }) => (
+      <DataTableColumnHeader column={column} title="Status" />
+    ),
     cell: ({ row }) => {
-      const status = row.getValue('status') as Status;
+      const status = row.getValue("status") as Status;
       if (!status) return null;
       return (
         <div className="flex w-[100px] items-center">
-          {iconMappings[status.icon as keyof typeof iconMappings]}
+          {status.icon && Icons[status.icon as keyof typeof Icons]}
           <span>{status.label}</span>
         </div>
       );
     },
     filterFn: (row, _id, value) => {
-      const status = row.getValue('status') as Status;
+      const status = row.getValue("status") as Status;
       return value.includes(status.value);
     },
   },
   {
-    accessorKey: 'createdOn',
-    header: ({ column }) => <DataTableColumnHeader column={column} title="Created On" />,
+    accessorKey: "createdOn",
+    header: ({ column }) => (
+      <DataTableColumnHeader column={column} title="Created On" />
+    ),
     cell: ({ row }) => {
       const createdOn = row.original.createdOn;
-      const createdDate = createdOn ? format(createdOn, 'MM/dd/yyyy') : null;
+      const createdDate = createdOn ? format(createdOn, "MM/dd/yyyy") : null;
       return <div className="flex items-center">{createdDate}</div>;
     },
     filterFn: (row, _id, value) => {
@@ -91,21 +99,25 @@ export const columns: ColumnDef<Todo>[] = [
     },
   },
   {
-    accessorKey: 'due',
-    header: ({ column }) => <DataTableColumnHeader column={column} title="Due" />,
+    accessorKey: "due",
+    header: ({ column }) => (
+      <DataTableColumnHeader column={column} title="Due" />
+    ),
     cell: ({ row }) => {
       const due = row.original.due;
-      const dueDate = due ? format(due, 'MM/dd/yyyy') : null;
+      const dueDate = due ? format(due, "MM/dd/yyyy") : null;
       return <div className="flex items-center">{dueDate}</div>;
     },
     filterFn: (row, _id, value) => {
-      const due = row.getValue('due');
+      const due = row.getValue("due");
       return value.includes(due);
     },
   },
   {
-    accessorKey: 'user',
-    header: ({ column }) => <DataTableColumnHeader column={column} title="User" />,
+    accessorKey: "user",
+    header: ({ column }) => (
+      <DataTableColumnHeader column={column} title="User" />
+    ),
     cell: ({ row }) => {
       const username = row.original.myUser.userName;
       if (!username) return null;
@@ -118,7 +130,7 @@ export const columns: ColumnDef<Todo>[] = [
     enableSorting: false,
   },
   {
-    id: 'actions',
+    id: "actions",
     cell: ({ row }) => <DataTableRowActions row={row} />,
   },
 ];

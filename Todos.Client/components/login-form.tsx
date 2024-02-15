@@ -14,7 +14,7 @@ import { useRouter } from "next/navigation";
 import { Input } from "./ui/input";
 import { login } from "@/lib/actions";
 import { useToast } from "./ui/use-toast";
-import { iconMappings } from "./icons";
+import { Icons } from "./icons";
 
 const signInScema = z.object({
   email: z.string().email(),
@@ -110,7 +110,7 @@ const LoginForm: React.FC = () => {
         <Button disabled={isPending} type="submit" className="mt-4 w-full">
           Log in
           {isPending ? (
-            <iconMappings.spinner className="mr-2 h-4 w-4 animate-spin" />
+            <Icons.spinner className="mr-2 h-4 w-4 animate-spin" />
           ) : (
             <ArrowRightIcon className="ml-auto h-5 w-5" />
           )}

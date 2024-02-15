@@ -9,32 +9,34 @@ import {
   CheckCircledIcon,
 } from "@radix-ui/react-icons";
 import { ListTodoIcon } from "lucide-react";
-type IconProps = React.HTMLAttributes<SVGAElement>;
-export const iconMappings = {
-  ArrowTopRightIcon: (
+type IconProps = React.HTMLAttributes<SVGSVGElement>;
+export const Icons = {
+  ArrowTopRightIcon: (props: IconProps) => (
     <ArrowTopRightIcon className="mr-2 h-4 w-4 text-muted-foreground" />
   ),
-  ArrowUpIcon: <ArrowUpIcon className="mr-2 h-4 w-4 text-muted-foreground" />,
-  ArrowRightIcon: (
+  ArrowUpIcon: (props: IconProps) => (
+    <ArrowUpIcon className="mr-2 h-4 w-4 text-muted-foreground" />
+  ),
+  ArrowRightIcon: (props: IconProps) => (
     <ArrowRightIcon className="mr-2 h-4 w-4 text-muted-foreground" />
   ),
-  ArrowDownIcon: (
+  ArrowDownIcon: (props: IconProps) => (
     <ArrowDownIcon className="mr-2 h-4 w-4 text-muted-foreground" />
   ),
-  QuestionMarkCircledIcon: (
+  QuestionMarkCircledIcon: (props: IconProps) => (
     <QuestionMarkCircledIcon className="mr-2 h-4 w-4 text-muted-foreground" />
   ),
-  StopwatchIcon: (
+  StopwatchIcon: (props: IconProps) => (
     <StopwatchIcon className="mr-2 h-4 w-4 text-muted-foreground" />
   ),
-  CrossCircledIcon: (
+  CrossCircledIcon: (props: IconProps) => (
     <CrossCircledIcon className="mr-2 h-4 w-4 text-muted-foreground" />
   ),
-  CheckCircledIcon: (
+  CheckCircledIcon: (props: IconProps) => (
     <CheckCircledIcon className="mr-2 h-4 w-4 text-muted-foreground" />
   ),
-  logo: <ListTodoIcon className="h-16 w-16" />,
-  spinner: (props: any) => ( // !todo
+  logo: (props: IconProps) => <ListTodoIcon className="h-16 w-16" />,
+  spinner: (props: IconProps) => (
     <svg
       xmlns="http://www.w3.org/2000/svg"
       width="24"
