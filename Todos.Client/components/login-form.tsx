@@ -1,15 +1,20 @@
-'use client';
-import React from 'react';
-import { useForm } from 'react-hook-form';
-import { z } from 'zod';
-import { zodResolver } from '@hookform/resolvers/zod';
-import { Button } from './ui/button';
-import { AtSymbolIcon, KeyIcon, ExclamationCircleIcon } from '@heroicons/react/24/outline';
-import { ArrowRightIcon } from '@heroicons/react/20/solid';
-import { useRouter } from 'next/navigation';
-import { Input } from './ui/input';
-import { login } from '@/lib/actions';
-import { useToast } from './ui/use-toast';
+"use client";
+import React, { useTransition } from "react";
+import { useForm } from "react-hook-form";
+import { z } from "zod";
+import { zodResolver } from "@hookform/resolvers/zod";
+import { Button } from "./ui/button";
+import {
+  AtSymbolIcon,
+  KeyIcon,
+  ExclamationCircleIcon,
+} from "@heroicons/react/24/outline";
+import { ArrowRightIcon } from "@heroicons/react/20/solid";
+import { useRouter } from "next/navigation";
+import { Input } from "./ui/input";
+import { login } from "@/lib/actions";
+import { useToast } from "./ui/use-toast";
+import { iconMappings } from "./icons";
 
 const signInScema = z.object({
   email: z.string().email(),
@@ -19,6 +24,7 @@ const signInScema = z.object({
 type SignInSchemaType = z.infer<typeof signInScema>;
 
 const LoginForm: React.FC = () => {
+  const [isPending, startTransition] = useTransition();
   const {
     register,
     handleSubmit,
@@ -29,28 +35,30 @@ const LoginForm: React.FC = () => {
   const router = useRouter();
   const { toast } = useToast();
   const onSubmit = async (data: SignInSchemaType) => {
-    try {
-      const res = await login(data.email, data.password);
-      if (res) {
+    startTransition(async () => {
+      try {
+        const res = await login(data.email, data.password);
+        if (res) {
+          toast({
+            title: "Logged in",
+            description: `You are now logged in.`,
+          });
+          router.push("/todos");
+        } else {
+          toast({
+            title: "Error",
+            description: `Something went wrong.`,
+            variant: "destructive",
+          });
+        }
+      } catch (error: any) {
         toast({
-          title: 'Logged in',
-          description: `You are now logged in.`,
-        });
-        router.push('/todos');
-      } else {
-        toast({
-          title: 'Error',
-          description: `Something went wrong.`,
-          variant: 'destructive',
+          title: "Error",
+          description: `${error.message}`,
+          variant: "destructive",
         });
       }
-    } catch (error: any) {
-      toast({
-        title: 'Error',
-        description: `${error.message}`,
-        variant: 'destructive',
-      });
-    }
+    });
   };
 
   return (
@@ -59,12 +67,16 @@ const LoginForm: React.FC = () => {
         <h1 className="mb-3 text-2xl">Please log in to continue.</h1>
         <div className="w-full">
           <div>
-            <label className="mb-3 mt-5 block text-xs font-medium" htmlFor="email">
+            <label
+              className="mb-3 mt-5 block text-xs font-medium"
+              htmlFor="email"
+            >
               Email
             </label>
             <div className="relative">
               <Input
-                {...register('email')}
+                disabled={isPending}
+                {...register("email")}
                 className="peer block w-full rounded-md border py-[9px] pl-10 text-sm outline-2"
                 id="email"
                 type="email"
@@ -75,12 +87,16 @@ const LoginForm: React.FC = () => {
             </div>
           </div>
           <div className="mt-4">
-            <label className="mb-3 mt-5 block text-xs font-medium" htmlFor="password">
+            <label
+              className="mb-3 mt-5 block text-xs font-medium"
+              htmlFor="password"
+            >
               Password
             </label>
             <div className="relative">
               <Input
-                {...register('password')}
+                disabled={isPending}
+                {...register("password")}
                 className="peer block w-full rounded-md border py-[9px] pl-10 text-sm outline-2"
                 id="password"
                 type="password"
@@ -91,10 +107,19 @@ const LoginForm: React.FC = () => {
             </div>
           </div>
         </div>
-        <Button type="submit" className="mt-4 w-full">
-          Log in <ArrowRightIcon className="ml-auto h-5 w-5" />
+        <Button disabled={isPending} type="submit" className="mt-4 w-full">
+          Log in
+          {isPending ? (
+            <iconMappings.spinner className="mr-2 h-4 w-4 animate-spin" />
+          ) : (
+            <ArrowRightIcon className="ml-auto h-5 w-5" />
+          )}
         </Button>
-        <div className="flex flex-col h-8 space-y-1 my-1" aria-live="polite" aria-atomic="true">
+        <div
+          className="flex flex-col h-8 space-y-1 my-1"
+          aria-live="polite"
+          aria-atomic="true"
+        >
           {errors.email && (
             <div className="flex space-x-1">
               <ExclamationCircleIcon className="h-5 w-5 text-warning" />
