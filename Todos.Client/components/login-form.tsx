@@ -16,12 +16,12 @@ import { login } from "@/lib/actions";
 import { useToast } from "./ui/use-toast";
 import { Icons } from "./icons";
 
-const signInScema = z.object({
+const signInSchema = z.object({
   email: z.string().email(),
   password: z.string().min(8),
 });
 
-type SignInSchemaType = z.infer<typeof signInScema>;
+type SignInSchemaType = z.infer<typeof signInSchema>;
 
 const LoginForm: React.FC = () => {
   const [isPending, startTransition] = useTransition();
@@ -30,7 +30,7 @@ const LoginForm: React.FC = () => {
     handleSubmit,
     formState: { errors },
   } = useForm<SignInSchemaType>({
-    resolver: zodResolver(signInScema),
+    resolver: zodResolver(signInSchema),
   });
   const router = useRouter();
   const { toast } = useToast();
