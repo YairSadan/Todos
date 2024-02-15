@@ -1,5 +1,5 @@
 export async function GET(request: Request) {
-  const res = await fetch('http://localhost:5160/api/status', {
+  const res = await fetch('https://app-todos-001.azurewebsites.net/api/status', {
     method: 'GET',
     headers: {
       'Content-Type': 'application/json',

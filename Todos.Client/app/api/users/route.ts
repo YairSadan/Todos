@@ -1,7 +1,7 @@
 import { cookies } from 'next/headers';
 
 export async function GET(request: Request) {
-  const res = await fetch('http://localhost:5160/api/MyUsers', {
+  const res = await fetch('https://app-todos-001.azurewebsites.net/api/MyUsers', {
     method: 'GET',
     headers: {
       'Content-Type': 'application/json',

@@ -3,7 +3,7 @@ import { revalidatePath } from 'next/cache';
 import { cookies } from 'next/headers';
 
 export const getTodos = async (filterOn: string = ''): Promise<any> => {
-  const res = await fetch(`http://localhost:5160/api/todos?filterOn=${filterOn}`, {
+  const res = await fetch(`https://app-todos-001.azurewebsites.net/api/todos?filterOn=${filterOn}`, {
     method: 'GET',
     headers: {
       'Content-Type': 'application/json',
@@ -14,7 +14,7 @@ export const getTodos = async (filterOn: string = ''): Promise<any> => {
 };
 export const addTodo = async (todo: any): Promise<any> => {
   // add a tododto type
-  const res = await fetch(`http://localhost:5160/api/todos`, {
+  const res = await fetch(`https://app-todos-001.azurewebsites.net/api/todos`, {
     method: 'POST',
     headers: {
       'Content-Type': 'application/json',
@@ -27,7 +27,7 @@ export const addTodo = async (todo: any): Promise<any> => {
 };
 
 export const getPriorities = async (): Promise<any> => {
-  const res = await fetch(`http://localhost:5160/api/priorities`, {
+  const res = await fetch(`https://app-todos-001.azurewebsites.net/api/priorities`, {
     method: 'GET',
     headers: {
       'Content-Type': 'application/json',
@@ -37,7 +37,7 @@ export const getPriorities = async (): Promise<any> => {
 };
 
 export const getStatuses = async (): Promise<any> => {
-  const res = await fetch(`http://localhost:5160/api/status`, {
+  const res = await fetch(`https://app-todos-001.azurewebsites.net/api/status`, {
     method: 'GET',
     headers: {
       'Content-Type': 'application/json',
@@ -47,7 +47,7 @@ export const getStatuses = async (): Promise<any> => {
 };
 
 export const getUsers = async (): Promise<any> => {
-  const res = await fetch(`http://localhost:5160/api/MyUsers`, {
+  const res = await fetch(`https://app-todos-001.azurewebsites.net/api/MyUsers`, {
     method: 'GET',
     headers: {
       'Content-Type': 'application/json',
@@ -58,7 +58,7 @@ export const getUsers = async (): Promise<any> => {
 };
 
 export const deleteTodo = (id: string) => async () => {
-  const res = await fetch(`http://localhost:5160/api/todos/${id}`, {
+  const res = await fetch(`https://app-todos-001.azurewebsites.net/api/todos/${id}`, {
     method: 'DELETE',
     headers: {
       'Content-Type': 'application/json',
@@ -74,7 +74,7 @@ export const logout = () => async () => {
 };
 export const login = async (email: string, password: string) => {
   try {
-    const res = await fetch(`http://localhost:5160/login`, {
+    const res = await fetch(`https://app-todos-001.azurewebsites.net/login`, {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',

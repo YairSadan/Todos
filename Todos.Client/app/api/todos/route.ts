@@ -4,7 +4,7 @@ import { NextRequest } from 'next/server';
 export async function GET(request: NextRequest) {
   const { searchParams } = new URL(request.nextUrl);
   const res = await fetch(
-    `http://localhost:5160/api/todos?filterOn=${searchParams.get('filterOn')}`,
+    `https://app-todos-001.azurewebsites.net/api/todos?filterOn=${searchParams.get('filterOn')}`,
     {
       method: 'GET',
       headers: {
@@ -19,7 +19,7 @@ export async function GET(request: NextRequest) {
 
 export async function DELETE(request: Request) {
   const { id } = await request.json();
-  await fetch(`http://localhost:5160/api/todos/${id}`, {
+  await fetch(`https://app-todos-001.azurewebsites.net/api/todos/${id}`, {
     method: 'DELETE',
     headers: {
       'Content-Type': 'application/json',

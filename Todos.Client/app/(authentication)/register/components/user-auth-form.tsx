@@ -20,7 +20,7 @@ const registerSchema = z.object({
 });
 
 const registerFetch = async (email: string, password: string) => {
-  const res = await fetch(`http://localhost:5160/register`, {
+  const res = await fetch(`https://app-todos-001.azurewebsites.net/register`, {
     method: 'POST',
     headers: {
       'Content-Type': 'application/json',
