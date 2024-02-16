@@ -15,8 +15,8 @@ export default function AddTodoDialog() {
   return (
     <Dialog>
       <DialogTrigger asChild>
-        <Button variant="outline" size="sm" className="ml-auto hidden h-8 lg:flex">
-          <PlusIcon className="mr-2 h-4 w-4" />
+        <Button variant="outline" size="sm" className="ml-auto h-8 flex text-xs md:text-sm min-w-28">
+          <PlusIcon className="mr-1 h-4 w-4" />
           Add Todo
         </Button>
       </DialogTrigger>

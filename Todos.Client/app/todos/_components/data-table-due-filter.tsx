@@ -1,6 +1,7 @@
-import * as React from 'react';
-import { Column } from '@tanstack/react-table';
-import { Button } from '@/components/ui/button';
+import * as React from "react";
+import { Column } from "@tanstack/react-table";
+import { Button } from "@/components/ui/button";
+import { PlusCircledIcon } from "@radix-ui/react-icons";
 
 interface DataTableDueFilterProps<TData, TValue> {
   column?: Column<TData, TValue>;
@@ -29,7 +30,9 @@ export function DataTableDueFilter<TData, TValue>({
       }}
       variant="outline"
       size="sm"
-      className="h-8 border-dashed">
+      className="h-8 border-dashed text-xs md:text-sm min-w-28"
+    >
+      <PlusCircledIcon className="mr-2 h-4 w-4" />
       {title}
     </Button>
   );

@@ -1,6 +1,6 @@
-import { DataTable } from './data-table';
-import { columns } from './columns';
-import { UserNav } from './user-nav';
+import { DataTable } from './_components/data-table';
+import { columns } from './_components/columns';
+import { UserNav } from './_components/user-nav';
 import { getTodos } from '@/lib/actions';
 import { z } from 'zod';
 import { TodoSchema } from '@/data/schema';

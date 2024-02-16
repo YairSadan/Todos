@@ -103,8 +103,10 @@ export function DataTableToolbar<TData>({ table }: DataTableToolbarProps<TData>)
           </Button>
         )}
       </div>
-      <AddTodoDialog />
-      <DataTableViewOptions table={table} />
+      <div className='flex flex-col sm:flex-row space-y-2 sm:space-y-0 sm:space-x-2'>
+        <AddTodoDialog />
+        <DataTableViewOptions table={table} />
+      </div>
     </div>
   );
 }
