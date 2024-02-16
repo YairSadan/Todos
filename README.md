@@ -12,7 +12,7 @@ This Todos application is a user-friendly, web-based task management tool design
 
 ## Watch production website
 
-Follow this link to watch the application in production (compatible for computers only as for now )
+Follow this link to watch the application in production
 
 - [Todos]https://todos-puce-one.vercel.app/todos
 
