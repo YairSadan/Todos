@@ -6,7 +6,7 @@ import Link from "next/link";
 
 export default function LoginPage() {
   return (
-    <main className="container relative hidden h-[800px] flex-col items-center justify-center md:grid lg:max-w-none lg:px-0">
+    <main className="flex h-full flex-col items-center justify-center md:grid lg:max-w-none lg:px-0">
       <Link
         href="/register"
         className={cn(
