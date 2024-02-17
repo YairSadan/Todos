@@ -1,4 +1,4 @@
-import { z } from 'zod';
+import { z } from "zod";
 
 export const UserSchema = z.object({
   id: z.string(),
@@ -34,3 +34,14 @@ export type Todo = z.infer<typeof TodoSchema>;
 export type User = z.infer<typeof UserSchema>;
 export type Priority = z.infer<typeof PrioritySchema>;
 export type Status = z.infer<typeof StatusSchema>;
+
+export const AddTodoFormSchema = z.object({
+  title: z.string().min(2).max(50),
+  description: z.string().optional(),
+  due: z.date(),
+  myUserId: z.string().uuid(),
+  priorityId: z.string().uuid(),
+  statusId: z.string().uuid(),
+});
+
+export type FormValues = z.infer<typeof AddTodoFormSchema>;

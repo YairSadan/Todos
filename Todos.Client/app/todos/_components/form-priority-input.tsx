@@ -1,48 +1,33 @@
-import { FormControl, FormField, FormItem, FormLabel, FormMessage } from '@/components/ui/form';
+import {
+  FormControl,
+  FormField,
+  FormItem,
+  FormLabel,
+  FormMessage,
+} from "@/components/ui/form";
 import {
   Select,
   SelectContent,
   SelectItem,
   SelectTrigger,
   SelectValue,
-} from '@/components/ui/select';
-import React, { useEffect, useState } from 'react';
-import {
-  ArrowDownIcon,
-  ArrowRightIcon,
-  ArrowTopRightIcon,
-  ArrowUpIcon,
-} from '@radix-ui/react-icons';
-import { Priority } from '@/data/schema';
+} from "@/components/ui/select";
+import React, { useEffect, useState } from "react";
+import { AddTodoFormSchema, Priority } from "@/data/schema";
+import { getPriorities } from "@/lib/actions";
+import { modifyPriority } from "@/lib/modifications";
+import { Icons } from "@/components/icons";
+import { UseFormReturn } from "react-hook-form";
+import { z } from "zod";
 
-const getPriorities = async (): Promise<Priority[]> => {
-  const res = await fetch(`https://app-todos-001.azurewebsites.net/api/priorities`, {
-    method: 'GET',
-    headers: {
-      'Content-Type': 'application/json',
-      authorization: 'Bearer ' + sessionStorage.getItem('accessToken'),
-    },
-  });
-  const data = await res.json();
-  const modifiedData = data.map((priority: any) => ({
-    label: priority.name,
-    id: priority.id,
-  }));
-  modifiedData.forEach((priority: Priority) => {
-    if (priority.label === 'High') priority.icon = <ArrowTopRightIcon />;
-    else if (priority.label === 'Low') priority.icon = <ArrowDownIcon />;
-    else if (priority.label === 'Medium') priority.icon = <ArrowRightIcon />;
-    else if (priority.label === 'Critical') priority.icon = <ArrowUpIcon />;
-  });
-  return modifiedData;
-};
 
-export default function FormPriorityInput({ form }: { form: any }) {
-  //todo find the type of zod form
-  const [statuses, setStatuses] = useState<Priority[]>([]);
+export default function FormPriorityInput({ form }: { form: UseFormReturn<z.infer<typeof AddTodoFormSchema>> }) {
+  const [priorities, setPriorities] = useState<Priority[]>([]);
   useEffect(() => {
-    getPriorities().then((data) => {
-      setStatuses(data);
+    getPriorities().then((priorities) => {
+      setPriorities(
+        priorities.map((priority: any) => modifyPriority(priority))
+      );
     });
   }, []);
   return (
@@ -59,14 +44,17 @@ export default function FormPriorityInput({ form }: { form: any }) {
               </SelectTrigger>
             </FormControl>
             <SelectContent>
-              {statuses.map((priority) => (
-                <SelectItem key={priority.id} value={priority.id}>
-                  <div className="flex items-center space-x-2">
-                    {priority.icon}
-                    <span>{priority.label}</span>
-                  </div>
-                </SelectItem>
-              ))}
+              {priorities.map((priority) => {
+                const PriorityIcon = Icons[priority.icon as keyof typeof Icons];
+                return (
+                  <SelectItem key={priority.id} value={priority.id}>
+                    <div className="flex items-center space-x-2">
+                      {PriorityIcon && <PriorityIcon />}
+                      <span>{priority.label}</span>
+                    </div>
+                  </SelectItem>
+                );
+              })}
             </SelectContent>
           </Select>
           <FormMessage />

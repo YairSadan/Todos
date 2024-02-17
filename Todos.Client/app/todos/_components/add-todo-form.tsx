@@ -24,20 +24,14 @@ import FormStatusInput from './form-status-input';
 import FormPriorityInput from './form-priority-input';
 import { addTodo } from '@/lib/actions';
 import { useToast } from '@/components/ui/use-toast';
+import { AddTodoFormSchema } from '@/data/schema';
 
-const formSchema = z.object({
-  title: z.string().min(2).max(50),
-  description: z.string().optional(),
-  due: z.date(),
-  myUserId: z.string().uuid(),
-  priorityId: z.string().uuid(),
-  statusId: z.string().uuid(),
-});
+
 
 export default function AddTodoForm() {
   const {toast } = useToast(); 
-  const form = useForm<z.infer<typeof formSchema>>({
-    resolver: zodResolver(formSchema),
+  const form = useForm<z.infer<typeof AddTodoFormSchema>>({
+    resolver: zodResolver(AddTodoFormSchema),
     defaultValues: {
       title: '',
       description: '',
@@ -48,7 +42,7 @@ export default function AddTodoForm() {
     },
   });
 
-  function onSubmit(values: z.infer<typeof formSchema>) {
+  function onSubmit(values: z.infer<typeof AddTodoFormSchema>) {
     addTodo(values);
     toast({
       title: 'Todo Added',
@@ -129,8 +123,5 @@ export default function AddTodoForm() {
       </form>
     </Form>
   );
-}
-function useToasts(): { toast: any; } {
-  throw new Error('Function not implemented.');
 }
 

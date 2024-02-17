@@ -14,12 +14,13 @@ import {
 } from "@/components/ui/select";
 import React, { useEffect, useState } from "react";
 import { getStatuses } from "@/lib/actions";
-import { Status } from "@/data/schema";
+import { AddTodoFormSchema, Status } from "@/data/schema";
 import { modifyStatus } from "@/lib/modifications";
 import { Icons } from "@/components/icons";
+import { z } from "zod";
+import { UseFormReturn } from "react-hook-form";
 
-export default function FormStatusInput({ form }: { form: any }) {
-  // todo find the type of zod form
+export default function FormStatusInput({ form }: { form: UseFormReturn<z.infer<typeof AddTodoFormSchema>>}) {
   const [statuses, setStatuses] = useState<Status[]>([]);
   useEffect(() => {
     getStatuses().then((statuses) => {
@@ -40,14 +41,17 @@ export default function FormStatusInput({ form }: { form: any }) {
               </SelectTrigger>
             </FormControl>
             <SelectContent>
-              {statuses.map((status) => (
-                <SelectItem key={status.label} value={status.id}>
-                  <div className="flex items-center space-x-2">
-                    {status.icon && Icons[status.icon as keyof typeof Icons]}
-                    <span>{status.label}</span>
-                  </div>
-                </SelectItem>
-              ))}
+              {statuses.map((status) => {
+                const StatusIcon = Icons[status.icon as keyof typeof Icons];
+                return (
+                  <SelectItem key={status.label} value={status.id}>
+                    <div className="flex items-center space-x-2">
+                      {StatusIcon && <StatusIcon />}
+                      <span>{status.label}</span>
+                    </div>
+                  </SelectItem>
+                );
+              })}
             </SelectContent>
           </Select>
           <FormMessage />
