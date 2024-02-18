@@ -1,7 +1,6 @@
 "use client";
 import React, { useTransition } from "react";
 import { useForm } from "react-hook-form";
-import { z } from "zod";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { Button } from "./ui/button";
 import {
@@ -9,32 +8,27 @@ import {
   KeyIcon,
   ExclamationCircleIcon,
 } from "@heroicons/react/24/outline";
-import { ArrowRightIcon } from "@heroicons/react/20/solid";
 import { useRouter } from "next/navigation";
 import { Input } from "./ui/input";
 import { login } from "@/lib/actions";
 import { useToast } from "./ui/use-toast";
 import { Icons } from "./icons";
+import { LoginFormSchema, LoginFormValues } from "@/data/schema";
 
-const signInSchema = z.object({
-  email: z.string().email(),
-  password: z.string().min(8),
-});
 
-type SignInSchemaType = z.infer<typeof signInSchema>;
 
 const LoginForm: React.FC = () => {
   const [isPending, startTransition] = useTransition();
+  const router = useRouter();
+  const { toast } = useToast();
   const {
     register,
     handleSubmit,
     formState: { errors },
-  } = useForm<SignInSchemaType>({
-    resolver: zodResolver(signInSchema),
+  } = useForm<LoginFormValues>({
+    resolver: zodResolver(LoginFormSchema),
   });
-  const router = useRouter();
-  const { toast } = useToast();
-  const onSubmit = async (data: SignInSchemaType) => {
+  const onSubmit = async (data: LoginFormValues) => {
     startTransition(async () => {
       try {
         const res = await login(data.email, data.password);
@@ -110,9 +104,9 @@ const LoginForm: React.FC = () => {
         <Button disabled={isPending} type="submit" className="mt-4 w-full">
           Log in
           {isPending ? (
-            <Icons.spinner className="mr-2 h-4 w-4 animate-spin" />
+            <Icons.spinner className="ml-auto h-4 w-4 animate-spin" />
           ) : (
-            <ArrowRightIcon className="ml-auto h-5 w-5" />
+            <Icons.ArrowRightIcon className="ml-auto h-5 w-5" />
           )}
         </Button>
         <div

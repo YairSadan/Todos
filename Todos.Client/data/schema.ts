@@ -44,4 +44,16 @@ export const AddTodoFormSchema = z.object({
   statusId: z.string().uuid(),
 });
 
+export const RegisterFormSchema = z.object({
+  email: z.string().email(),
+  password: z.string().min(8),
+});
+
+export const LoginFormSchema = z.object({
+  email: z.string().email(),
+  password: z.string().min(8),
+});
+
 export type FormValues = z.infer<typeof AddTodoFormSchema>;
+export type RegisterFormValues = z.infer<typeof RegisterFormSchema>;
+export type LoginFormValues = z.infer<typeof LoginFormSchema>;

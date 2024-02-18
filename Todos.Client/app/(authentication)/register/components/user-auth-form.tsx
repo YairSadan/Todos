@@ -1,83 +1,63 @@
-'use client';
-import * as React from 'react';
-import { cn } from '@/lib/utils';
-import { Button } from '@/components/ui/button';
-import { Input } from '@/components/ui/input';
-import { Label } from '@/components/ui/label';
-import { useState } from 'react';
-import { useRouter } from 'next/navigation';
-import { zodResolver } from '@hookform/resolvers/zod';
-import { useForm } from 'react-hook-form';
-import { z } from 'zod';
-import { ExclamationCircleIcon } from '@heroicons/react/24/outline';
-import { useToast } from '@/components/ui/use-toast';
+"use client";
+import * as React from "react";
+import { cn } from "@/lib/utils";
+import { Button } from "@/components/ui/button";
+import { Input } from "@/components/ui/input";
+import { Label } from "@/components/ui/label";
+import { useState, useTransition } from "react";
+import { useRouter } from "next/navigation";
+import { zodResolver } from "@hookform/resolvers/zod";
+import { useForm } from "react-hook-form";
+import { ExclamationCircleIcon } from "@heroicons/react/24/outline";
+import { useToast } from "@/components/ui/use-toast";
+import { RegisterFormSchema, RegisterFormValues } from "@/data/schema";
+import { registerUser } from "@/lib/actions";
+import { Icons } from "@/components/icons";
 
-interface UserAuthFormProps extends React.HTMLAttributes<HTMLDivElement> {}
-
-const registerSchema = z.object({
-  email: z.string().email(),
-  password: z.string().min(8),
-});
-
-const registerFetch = async (email: string, password: string) => {
-  const res = await fetch(`https://app-todos-001.azurewebsites.net/register`, {
-    method: 'POST',
-    headers: {
-      'Content-Type': 'application/json',
-    },
-    body: JSON.stringify({
-      email,
-      password,
-    }),
-  });
-  if (res.status === 200) return true;
-  const response = JSON.parse(await res.text());
-  if (response.status === 400) {
-    if (response.errors && response.errors.DuplicateUserName) {
-      throw new Error('this email is already taken');
-    }
-    throw new Error('Something went wrong');
-  }
-};
-
-type RegisterSchemaType = z.infer<typeof registerSchema>;
-
-export function UserAuthForm({ className, ...props }: UserAuthFormProps) {
-  const [isLoading, setIsLoading] = useState<boolean>(false);
-  const [error, setError] = useState<string>('');
+export function UserAuthForm() {
+  const [isPending, startTransition] = useTransition();
   const router = useRouter();
-  const {toast} = useToast();
+  const [error, setError] = useState<string>("");
+  const { toast } = useToast();
 
   const {
     register,
     handleSubmit,
     formState: { errors },
-  } = useForm<RegisterSchemaType>({
-    resolver: zodResolver(registerSchema),
+  } = useForm<RegisterFormValues>({
+    resolver: zodResolver(RegisterFormSchema),
   });
 
-  const onSubmit = async (data: RegisterSchemaType) => {
-    setIsLoading(true);
-    try {
-      await registerFetch(data.email, data.password);
-      toast({
-        title: 'Account created',
-        description: 'We have created your account for you, please login.',
-      });
-      router.push('/login');
-    } catch (error: any) {
-      setError(error.message);
-      toast({
-        title: 'Error',
-        description: error.message,
-        variant: "destructive",
-      });
-      setIsLoading(false);
-    }
+  const onSubmit = async (data: RegisterFormValues) => {
+    startTransition(async () => {
+      try {
+        const res = await registerUser(data.email, data.password);
+        if (res) {
+          toast({
+            title: "Account created",
+            description: "We have created your account for you, please login.",
+          });
+          router.push("/login");
+        } else {
+          toast({
+            title: "Error",
+            description: "Something went wrong",
+            variant: "destructive",
+          });
+        }
+      } catch (error: any) {
+        setError(error.message);
+        toast({
+          title: "Error",
+          description: error.message,
+          variant: "destructive",
+        });
+      }
+    });
   };
 
   return (
-    <div className={cn('grid gap-6', className)} {...props}>
+    <div className={cn("grid gap-6")}>
       <form onSubmit={handleSubmit(onSubmit)}>
         <div className="grid gap-2">
           <div className="grid gap-1">
@@ -85,15 +65,15 @@ export function UserAuthForm({ className, ...props }: UserAuthFormProps) {
               Email
             </Label>
             <Input
-              {...register('email')}
-              onChange={() => setError('')}
+              {...register("email")}
+              onChange={() => setError("")}
               id="email"
               placeholder="name@example.com"
               type="email"
               autoCapitalize="none"
               autoComplete="email"
               autoCorrect="off"
-              disabled={isLoading}
+              disabled={isPending}
             />
           </div>
           <div className="grid gap-1">
@@ -101,35 +81,29 @@ export function UserAuthForm({ className, ...props }: UserAuthFormProps) {
               Password
             </Label>
             <Input
-              {...register('password')}
+              {...register("password")}
               id="password"
               placeholder="SomePassword123!"
               type="password"
               autoCapitalize="none"
               autoComplete="email"
               autoCorrect="off"
-              disabled={isLoading}
+              disabled={isPending}
             />
           </div>
-          <Button disabled={isLoading}>
-            {isLoading && (
-              <svg
-                xmlns="http://www.w3.org/2000/svg"
-                width="24"
-                height="24"
-                viewBox="0 0 24 24"
-                fill="none"
-                stroke="currentColor"
-                strokeWidth="2"
-                strokeLinecap="round"
-                strokeLinejoin="round"
-                className="r-2 h-4 w-4 animate-spin">
-                <path d="M21 12a9 9 0 1 1-6.219-8.56" />
-              </svg>
-            )}
+          <Button disabled={isPending}>
             Sign In with Email and Password
-          </Button>
-          <div className="flex flex-col h-8 space-y-1 my-1" aria-live="polite" aria-atomic="true">
+            {isPending ? (
+            <Icons.spinner className="ml-auto h-4 w-4 animate-spin" />
+          ) : (
+            <Icons.ArrowRightIcon className="ml-auto h-5 w-5" />
+          )}
+        </Button>
+          <div
+            className="flex flex-col h-8 space-y-1 my-1"
+            aria-live="polite"
+            aria-atomic="true"
+          >
             {errors.email && (
               <div className="flex space-x-1">
                 <ExclamationCircleIcon className="h-5 w-5 text-warning" />
@@ -139,7 +113,9 @@ export function UserAuthForm({ className, ...props }: UserAuthFormProps) {
             {errors.password && (
               <div className="flex space-x-1">
                 <ExclamationCircleIcon className="h-5 w-5 text-warning" />
-                <p className="text-sm text-warning">{errors.password?.message}</p>
+                <p className="text-sm text-warning">
+                  {errors.password?.message}
+                </p>
               </div>
             )}
             {error && (

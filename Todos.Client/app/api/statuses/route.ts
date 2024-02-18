@@ -1,5 +1,5 @@
 export async function GET(request: Request) {
-  const res = await fetch('https://app-todos-001.azurewebsites.net/api/status', {
+  const res = await fetch(`${process.env.DOMAIN}/api/status`, {
     method: 'GET',
     headers: {
       'Content-Type': 'application/json',
