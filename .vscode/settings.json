@@ -9,5 +9,7 @@
       "database": "todosdb",
       "username": "postgres"
     }
-  ]
+  ],
+  "appService.defaultWebAppToDeploy": "/subscriptions/f63b59aa-69e0-43f9-9980-449b992a2dfe/resourceGroups/appsvc_windows_centralus/providers/Microsoft.Web/sites/app-todos-001",
+  "appService.deploySubpath": "Todos.API/bin/Publish"
 }
