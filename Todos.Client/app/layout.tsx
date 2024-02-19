@@ -6,6 +6,7 @@ import { ThemeProvider } from "@/components/theme-provider";
 import { ModeToggle } from "@/components/mode-toggle";
 import { Toaster } from "@/components/ui/toaster";
 import { Analytics } from "@vercel/analytics/react";
+import { SpeedInsights } from "@vercel/speed-insights/next";
 const fontSans = FontSans({
   subsets: ["latin"],
   variable: "--font-sans",
@@ -35,6 +36,7 @@ export default function RootLayout({
           <ModeToggle />
           {children}
           <Analytics />
+          <SpeedInsights />
           <Toaster />
         </ThemeProvider>
       </body>

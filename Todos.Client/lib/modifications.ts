@@ -1,23 +1,23 @@
-import { Status, Priority, Todo, User } from '@/data/schema';
+import { Status, Priority, Todo, User } from "@/data/schema";
 export const modifyStatus = (status: any): Status => {
   const modifiedStatus: Status = {
     label: status.name,
     id: status.id,
     value: status.name,
-    icon: '',
+    icon: "",
   };
   switch (modifiedStatus.label) {
-    case 'Pending':
-      modifiedStatus.icon = 'QuestionMarkCircledIcon';
+    case "Pending":
+      modifiedStatus.icon = "QuestionMarkCircledIcon";
       break;
-    case 'In Progress':
-      modifiedStatus.icon = 'StopwatchIcon';
+    case "In Progress":
+      modifiedStatus.icon = "StopwatchIcon";
       break;
-    case 'Done':
-      modifiedStatus.icon = 'CheckCircledIcon';
+    case "Done":
+      modifiedStatus.icon = "CheckCircledIcon";
       break;
-    case 'Canceled':
-      modifiedStatus.icon = 'CrossCircledIcon';
+    case "Canceled":
+      modifiedStatus.icon = "CrossCircledIcon";
       break;
   }
   return JSON.parse(JSON.stringify(modifiedStatus));
@@ -28,20 +28,20 @@ export const modifyPriority = (priority: any): Priority => {
     label: priority.name,
     id: priority.id,
     value: priority.name,
-    icon: '',
+    icon: "",
   };
   switch (modifiedPriority.label) {
-    case 'High':
-      modifiedPriority.icon = 'ArrowTopRightIcon';
+    case "High":
+      modifiedPriority.icon = "ArrowTopRightIcon";
       break;
-    case 'Medium':
-      modifiedPriority.icon = 'ArrowRightIcon';
+    case "Medium":
+      modifiedPriority.icon = "ArrowRightIcon";
       break;
-    case 'Low':
-      modifiedPriority.icon = 'ArrowDownIcon';
+    case "Low":
+      modifiedPriority.icon = "ArrowDownIcon";
       break;
-    case 'Critical':
-      modifiedPriority.icon = 'ArrowUpIcon';
+    case "Critical":
+      modifiedPriority.icon = "ArrowUpIcon";
       break;
   }
   return JSON.parse(JSON.stringify(modifiedPriority));

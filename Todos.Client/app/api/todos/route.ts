@@ -1,15 +1,15 @@
-import { cookies } from 'next/headers';
-import { NextRequest } from 'next/server';
+import { cookies } from "next/headers";
+import { NextRequest } from "next/server";
 
 export async function GET(request: NextRequest) {
   const { searchParams } = new URL(request.nextUrl);
   const res = await fetch(
-    `${process.env.DOMAIN}/api/todos?filterOn=${searchParams.get('filterOn')}`,
+    `${process.env.DOMAIN}/api/todos?filterOn=${searchParams.get("filterOn")}`,
     {
-      method: 'GET',
+      method: "GET",
       headers: {
-        'Content-Type': 'application/json',
-        Authorization: `Bearer ${cookies().get('accessToken')?.value}`,
+        "Content-Type": "application/json",
+        Authorization: `Bearer ${cookies().get("accessToken")?.value}`,
       },
     }
   );
@@ -20,10 +20,10 @@ export async function GET(request: NextRequest) {
 export async function DELETE(request: Request) {
   const { id } = await request.json();
   await fetch(`${process.env.DOMAIN}/api/todos/${id}`, {
-    method: 'DELETE',
+    method: "DELETE",
     headers: {
-      'Content-Type': 'application/json',
-      Authorization: `Bearer ${cookies().get('accessToken')?.value}`,
+      "Content-Type": "application/json",
+      Authorization: `Bearer ${cookies().get("accessToken")?.value}`,
     },
   });
 }

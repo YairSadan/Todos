@@ -1,10 +1,10 @@
-import { DataTable } from './_components/data-table';
-import { columns } from './_components/columns';
-import { UserNav } from './_components/user-nav';
-import { getTodos } from '@/lib/actions';
-import { z } from 'zod';
-import { TodoSchema } from '@/data/schema';
-import { modifyTodo } from '@/lib/modifications';
+import { DataTable } from "./_components/data-table";
+import { columns } from "./_components/columns";
+import { UserNav } from "./_components/user-nav";
+import { getTodos } from "@/lib/actions";
+import { z } from "zod";
+import { TodoSchema } from "@/data/schema";
+import { modifyTodo } from "@/lib/modifications";
 async function getTasks() {
   const res = await getTodos();
   const todos = res.map((todo: any) => modifyTodo(todo));
@@ -17,7 +17,9 @@ export default async function TodosPage() {
       <div className="flex items-center justify-between space-y-2">
         <div>
           <h2 className="text-2xl font-bold tracking-tight">Welcome back!</h2>
-          <p className="text-muted-foreground">Here&apos;s a list of your team tasks!</p>
+          <p className="text-muted-foreground">
+            Here&apos;s a list of your team tasks!
+          </p>
         </div>
         <div className="flex items-center space-x-2">
           <UserNav />

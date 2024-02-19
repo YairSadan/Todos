@@ -20,8 +20,11 @@ import { Icons } from "@/components/icons";
 import { UseFormReturn } from "react-hook-form";
 import { z } from "zod";
 
-
-export default function FormPriorityInput({ form }: { form: UseFormReturn<z.infer<typeof AddTodoFormSchema>> }) {
+export default function FormPriorityInput({
+  form,
+}: {
+  form: UseFormReturn<z.infer<typeof AddTodoFormSchema>>;
+}) {
   const [priorities, setPriorities] = useState<Priority[]>([]);
   useEffect(() => {
     getPriorities().then((priorities) => {

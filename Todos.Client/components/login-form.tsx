@@ -15,8 +15,6 @@ import { useToast } from "./ui/use-toast";
 import { Icons } from "./icons";
 import { LoginFormSchema, LoginFormValues } from "@/data/schema";
 
-
-
 const LoginForm: React.FC = () => {
   const [isPending, startTransition] = useTransition();
   const router = useRouter();

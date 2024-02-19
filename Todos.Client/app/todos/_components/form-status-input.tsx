@@ -20,7 +20,11 @@ import { Icons } from "@/components/icons";
 import { z } from "zod";
 import { UseFormReturn } from "react-hook-form";
 
-export default function FormStatusInput({ form }: { form: UseFormReturn<z.infer<typeof AddTodoFormSchema>>}) {
+export default function FormStatusInput({
+  form,
+}: {
+  form: UseFormReturn<z.infer<typeof AddTodoFormSchema>>;
+}) {
   const [statuses, setStatuses] = useState<Status[]>([]);
   useEffect(() => {
     getStatuses().then((statuses) => {

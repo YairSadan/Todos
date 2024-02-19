@@ -1,6 +1,6 @@
-'use client';
-import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
-import { Button } from '@/components/ui/button';
+"use client";
+import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
+import { Button } from "@/components/ui/button";
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -10,14 +10,14 @@ import {
   DropdownMenuSeparator,
   DropdownMenuShortcut,
   DropdownMenuTrigger,
-} from '@/components/ui/dropdown-menu';
-import { useRouter } from 'next/navigation';
+} from "@/components/ui/dropdown-menu";
+import { useRouter } from "next/navigation";
 
 export function UserNav() {
   const router = useRouter();
   const logout = async () => {
-    await fetch('/api/logout');
-    router.replace('/login');
+    await fetch("/api/logout");
+    router.replace("/login");
   };
 
   return (
@@ -34,7 +34,9 @@ export function UserNav() {
         <DropdownMenuLabel className="font-normal">
           <div className="flex flex-col space-y-1">
             <p className="text-sm font-medium leading-none">shadcn</p>
-            <p className="text-xs leading-none text-muted-foreground">m@example.com</p>
+            <p className="text-xs leading-none text-muted-foreground">
+              m@example.com
+            </p>
           </div>
         </DropdownMenuLabel>
         <DropdownMenuSeparator />

@@ -88,7 +88,7 @@ export const columns: ColumnDef<Todo>[] = [
     ),
     cell: ({ row }) => {
       const createdOn = row.original.createdOn;
-      const createdDate = createdOn ? format(createdOn, "MM/dd/yyyy") : null;
+      const createdDate = createdOn ? format(createdOn, "dd/MM/yyyy") : null;
       return <div className="flex items-center">{createdDate}</div>;
     },
     filterFn: (row, _id, value) => {
@@ -106,7 +106,7 @@ export const columns: ColumnDef<Todo>[] = [
     ),
     cell: ({ row }) => {
       const due = row.original.due;
-      const dueDate = due ? format(due, "MM/dd/yyyy") : null;
+      const dueDate = due ? format(due, "dd/MM/yyyy") : null;
       return <div className="flex items-center">{dueDate}</div>;
     },
     filterFn: (row, _id, value) => {
