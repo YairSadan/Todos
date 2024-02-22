@@ -1,7 +1,17 @@
 "use server";
 import { revalidatePath } from "next/cache";
 import { cookies } from "next/headers";
-
+export const getInfo = async (): Promise<any> => {
+  const res = await fetch(`${process.env.DOMAIN}/manage/info`, {
+    method: "GET",
+    headers: {
+      "Content-Type": "application/json",
+      Authorization: `Bearer ${cookies().get("accessToken")?.value}`,
+    },
+  });
+  if (res.status === 401) throw new Error("Unauthorized");
+  return await res.json();
+};
 export const getTodos = async (filterOn: string = ""): Promise<any> => {
   const res = await fetch(
     `${process.env.DOMAIN}/api/todos?filterOn=${filterOn}`,

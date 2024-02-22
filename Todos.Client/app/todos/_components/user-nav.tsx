@@ -11,31 +11,50 @@ import {
   DropdownMenuShortcut,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
+import { getInfo } from "@/lib/actions";
 import { useRouter } from "next/navigation";
+import { useEffect, useState } from "react";
 
 export function UserNav() {
+  // currently this is very limited because the only info we have is the email therefore some things here are hardcoded
   const router = useRouter();
   const logout = async () => {
     await fetch("/api/logout");
     router.replace("/login");
   };
-
+  const [user, setUser] = useState({ email: "israel@gmail.com", isEmailConfiremd: false });
+  useEffect(() => {
+    (async () => {
+      setUser(await getInfo());
+    })();
+  }, []);
   return (
     <DropdownMenu>
       <DropdownMenuTrigger asChild>
         <Button variant="ghost" className="relative h-8 w-8 rounded-full">
           <Avatar className="h-9 w-9">
-            <AvatarImage src="" alt="@shadcn" />
-            <AvatarFallback>SC</AvatarFallback>
+            <AvatarImage src="" alt={user.email} />
+            <AvatarFallback>
+              {user.email.split("@")[0].charAt(0).toUpperCase() +
+                "." +
+                user.email
+                  .split("@")[0]
+                  .charAt(user.email.split("@")[0].length - 4)
+                  .toUpperCase()}
+            </AvatarFallback>
           </Avatar>
         </Button>
       </DropdownMenuTrigger>
       <DropdownMenuContent className="w-56" align="end" forceMount>
         <DropdownMenuLabel className="font-normal">
           <div className="flex flex-col space-y-1">
-            <p className="text-sm font-medium leading-none">shadcn</p>
+            <p className="text-sm font-medium leading-none">
+              {user.email &&
+                user.email.split("@")[0].charAt(0).toUpperCase() +
+                  user.email.split("@")[0].slice(1)}
+            </p>
             <p className="text-xs leading-none text-muted-foreground">
-              m@example.com
+              {user && user.email}
             </p>
           </div>
         </DropdownMenuLabel>
